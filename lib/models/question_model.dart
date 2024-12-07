@@ -11,7 +11,7 @@ class QuestionModel {
     required this.question_text,
   }) : id = id ?? const Uuid().v4();
 
-  factory QuestionModel.fromMap(Map<String, dynamic> map) {
+  factory QuestionModel.fromMap(Map<String, dynamic> map, String id) {
     return QuestionModel(
       id: map['id'],
       quiz_id: map['quiz_id'],

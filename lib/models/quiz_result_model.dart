@@ -13,7 +13,7 @@ class QuizResultModel {
     required this.score,
   }) : id = id ?? const Uuid().v4();
 
-  factory QuizResultModel.fromMap(Map<String, dynamic> map) {
+  factory QuizResultModel.fromMap(Map<String, dynamic> map, String id) {
     return QuizResultModel(
       id: map['id'],
       user_id: map['user_id'],

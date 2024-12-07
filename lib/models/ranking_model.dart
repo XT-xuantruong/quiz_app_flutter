@@ -11,7 +11,7 @@ class RankingModel {
     required this.total_score,
   }) : id = id ?? const Uuid().v4();
 
-  factory RankingModel.fromMap(Map<String, dynamic> map) {
+  factory RankingModel.fromMap(Map<String, dynamic> map, String id) {
     return RankingModel(
       id: map['id'],
       user_id: map['user_id'],

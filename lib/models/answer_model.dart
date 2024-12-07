@@ -13,7 +13,7 @@ class AnswerModel {
     required this.is_correct,
   }) : id = id ?? const Uuid().v4();
 
-  factory AnswerModel.fromMap(Map<String, dynamic> map) {
+  factory AnswerModel.fromMap(Map<String, dynamic> map, String id) {
     return AnswerModel(
       id: map['id'],
       question_id: map['question_id'],

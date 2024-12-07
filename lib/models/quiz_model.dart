@@ -1,20 +1,20 @@
 import 'package:uuid/uuid.dart';
 
-class QuizzModel {
+class QuizModel {
   String id;
   String title;
   String category_id;
   String description;
 
-  QuizzModel({
+  QuizModel({
     String? id,
     required this.title,
     required this.category_id,
     required this.description,
   }) : id = id ?? const Uuid().v4();
 
-  factory QuizzModel.fromMap(Map<String, dynamic> map) {
-    return QuizzModel(
+  factory QuizModel.fromMap(Map<String, dynamic> map, String id) {
+    return QuizModel(
       id: map['id'],
       title: map['title'],
       category_id: map['category_id'],

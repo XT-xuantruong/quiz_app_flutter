@@ -7,6 +7,8 @@ class QuizModel {
   String category_id;
   String img_url;
   String description;
+  final int questionCount;
+  final bool isCompleted;
 
   QuizModel({
     String? id,
@@ -14,6 +16,8 @@ class QuizModel {
     required this.category_id,
     required this.img_url,
     required this.description,
+    this.questionCount = 0,
+    this.isCompleted = false,
   }) : id = id ?? const Uuid().v4();
 
   factory QuizModel.fromMap(Map<String, dynamic> map, String id) {
@@ -27,6 +31,20 @@ class QuizModel {
       description: map['description'] ?? '',
     );
   }
+  QuizModel copyWith({
+    int? questionCount,
+    bool? isCompleted,
+  }) {
+    return QuizModel(
+      id: id,
+      title: title,
+      img_url: img_url,
+      questionCount: questionCount ?? this.questionCount,
+      isCompleted: isCompleted ?? this.isCompleted,
+      category_id: category_id,
+      description: description,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -35,6 +53,8 @@ class QuizModel {
       'category_id': category_id,
       'img_url': img_url,
       'description': description,
+      'questionCount': questionCount,
+      'isCompleted': isCompleted,
     };
   }
 }

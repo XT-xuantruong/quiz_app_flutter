@@ -4,11 +4,7 @@ import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-// import 'package:quiz_app/screens/login_screen.dart';
-=======
 import 'package:quiz_app/screens/login_screen.dart';
->>>>>>> be3e4786713c60bfb492e532666ed6356bfbdb36
 import 'firebase_options.dart';
 
 Future<void> initializeApp() async {
@@ -36,10 +32,6 @@ Future<void> initializeApp() async {
     // 4. Initialize Cloudinary
     CloudinaryContext.cloudinary =
         Cloudinary.fromCloudName(cloudName: 'dvzjb1o3h');
-<<<<<<< HEAD
-=======
-
->>>>>>> be3e4786713c60bfb492e532666ed6356bfbdb36
   } catch (e, stackTrace) {
     debugPrint('Initialization error: $e');
     debugPrint('Stack trace: $stackTrace');
@@ -48,12 +40,7 @@ Future<void> initializeApp() async {
 }
 
 void main() async {
-<<<<<<< HEAD
-  runApp(const LoadingApp()); // Show loading initially
-=======
   runApp(const LoadingApp());  // Show loading initially
->>>>>>> be3e4786713c60bfb492e532666ed6356bfbdb36
-
   try {
     await initializeApp();
     runApp(const MyApp());
@@ -105,7 +92,7 @@ class ErrorApp extends StatelessWidget {
           ),
         ),
       ),
-<<<<<<< HEAD
+
     );
   }
 }
@@ -123,27 +110,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // home: LoginScreen(),
-=======
->>>>>>> be3e4786713c60bfb492e532666ed6356bfbdb36
-    );
-  }
-}
-
-// Add this class to wrap your HomeScreen
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter App',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home:  LoginScreen(),
+      home: LoginScreen(),
     );
   }
 }

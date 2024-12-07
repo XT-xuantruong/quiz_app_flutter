@@ -198,6 +198,8 @@ class _homeScreenState extends State<HomeScreen> {
                   child: QuizCard(
                     title: quiz.title,
                     img_url: quiz.img_url,
+                    question_quantity: quiz.questionCount,
+                    isComplete: quiz.isCompleted,
                   )
                 );
               },

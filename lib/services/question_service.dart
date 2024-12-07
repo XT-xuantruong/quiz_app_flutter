@@ -23,4 +23,16 @@ class QuestionsService {
   Future<void> deleteQuestion(String id) async {
     await _db.collection('questions').doc(id).delete();
   }
+
+  Future<int> getQuestionCountForQuiz(String quizId) async {
+    try {
+      final quizRef = _db.collection('quizzes').doc(quizId);
+      final snapshot = await _db.collection('questions')
+          .where('quiz_id', isEqualTo: quizRef).get();
+      return snapshot.docs.length;
+    } catch (e) {
+      print('Error fetching question count: $e');
+      return 0;
+    }
+  }
 }

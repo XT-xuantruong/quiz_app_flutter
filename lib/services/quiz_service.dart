@@ -9,8 +9,19 @@ class QuizService {
   }
 
   Future<List<QuizModel>> getQuizzes() async {
-    final snapshot = await _db.collection('quizzes').get();
-    return snapshot.docs.map((doc) => QuizModel.fromMap(doc.data(), doc.id)).toList();
+    try {
+      final snapshot = await _db.collection('quizzes').get();
+      if (snapshot.docs.isEmpty) {
+        print('No quizzes found in Firestore');
+      }
+      return snapshot.docs.map((doc) {
+        print('Document Data: ${doc.data()}');
+        return QuizModel.fromMap(doc.data(), doc.id);
+      }).toList();
+    } catch (e) {
+      print('Error fetching quizzes: $e');
+      rethrow;
+    }
   }
 
   Future<void> updateQuiz(QuizModel quiz) async {

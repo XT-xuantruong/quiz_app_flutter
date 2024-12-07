@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CategoryCard extends StatefulWidget {
-  const CategoryCard({super.key});
+  final String title;
+  final String imgUrl;
+  const CategoryCard({super.key, required this.title, required this.imgUrl});
 
   @override
   State<CategoryCard> createState() => _CategoryCardState();
@@ -21,11 +23,11 @@ class _CategoryCardState extends State<CategoryCard> {
             color: const Color(0xABABC2E3),
           ),
           child: Image.network(
-              'https://res.cloudinary.com/dvzjb1o3h/image/upload/v1733540025/n8thkelgktelveumowpd.jpg',
+              widget.imgUrl,
           ),
         ),
         SizedBox(height: 8),
-        Text("Python", style: TextStyle(fontSize: 16)),
+        Text(widget.title, style: TextStyle(fontSize: 16)),
       ],
     );
   }

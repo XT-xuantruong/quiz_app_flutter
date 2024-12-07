@@ -12,9 +12,9 @@ class Category{
   });
   factory Category.fromMap(Map<String, dynamic> map) {
     return Category(
-      id: map['id'] as String,
-      title: map['title'] as String,
-      imgUrl: map['img_url'] as String,
+      id: map['id'] ?? '',
+      title: map['title'] ?? '',
+      imgUrl: map['img_url'] ?? '',
     );
   }
   Map<String, dynamic> toMap() {

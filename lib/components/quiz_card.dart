@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class QuizCard extends StatefulWidget {
-  const QuizCard({super.key});
+  final String title;
+  final String img_url;
+
+  const QuizCard({super.key, required this.title, required this.img_url});
 
   @override
   State<QuizCard> createState() => _QuizCardState();
@@ -30,17 +33,17 @@ class _QuizCardState extends State<QuizCard> {
             Row(
               children: [
                 Image.network(
-                    "https://res.cloudinary.com/dvzjb1o3h/image/upload/v1733540025/n8thkelgktelveumowpd.jpg",
+                    widget.img_url,
                   width: 40,
                   height: 40,
                 ),
                 const SizedBox(width: 16),
-                const Column(
+                Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Math Quiz", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 2),
-                      Text("30 Question", style: TextStyle(fontSize: 18)),
+                      Text(widget.title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 2),
+                      const Text("30 Question", style: TextStyle(fontSize: 18)),
                     ]
                 ),
               ],

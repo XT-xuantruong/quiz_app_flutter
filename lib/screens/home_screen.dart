@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/components/category_card.dart';
 import 'package:quiz_app/components/quiz_card.dart';
+import 'package:quiz_app/models/quiz_model.dart';
+import 'package:quiz_app/services/quiz_service.dart';
 
 import '../components/searchField.dart';
+import '../models/category_model.dart';
+import '../services/category_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,75 +16,162 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _homeScreenState extends State<HomeScreen> {
+  final CategoryService _categoryService = CategoryService();
+  final QuizService _quizService = QuizService();
+  List<Category> categories = [];
+  List<QuizModel> quizzes = [];
+  bool isCateLoading = true;
+  bool isQuizLoading = true;
+  @override
+  void initState() {
+    super.initState();
+    fetchCategories();
+    fetchQuizzes();
+  }
+
+  Future<void> fetchCategories() async {
+    try {
+      final List<Category> fetchedCategories = await _categoryService.getCategories();
+      setState(() {
+        categories = fetchedCategories;
+        isCateLoading = false;
+      });
+      print(categories.map((category) => category.toMap()).toList());
+    } catch (e) {
+      print('Error fetching categories: $e');
+      setState(() {
+        isCateLoading = false;
+      });
+    }
+  }
+  Future<void> fetchQuizzes() async {
+    try {
+      final List<QuizModel> fetchedQuizzes = await _quizService.getQuizzes();
+      setState(() {
+        quizzes = fetchedQuizzes;
+        isQuizLoading = false;
+      });
+      print(quizzes.map((quizz) => quizz.toMap()).toList());
+    } catch (e) {
+      print('Error fetching categories: $e');
+      setState(() {
+        isQuizLoading = false;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              child: Row(
-                children: [
-                  ClipOval(
-                    child: Image.network(
-                      "https://res.cloudinary.com/dvzjb1o3h/image/upload/v1727704410/x6xaehqt16rjvnvhofv3.jpg",
-                      fit: BoxFit.cover,
-                      width: 50,
-                      height: 50,
-                    ),
-                  ),
-                  SizedBox(width: 8.0),
-                  Text('Truong'),
-                ],
-              ),
-            ),
-            Container(
-              width: 80,
-              height: 30,
-              decoration: BoxDecoration(
-                color: Colors.lightBlue,
-
-                borderRadius: BorderRadius.circular(10)
-              ),
-              child: Center(
-                  child: Text('1000')
-              ),
-            )
-          ],
-        ),
-      ),
+    return Scaffold(
+      appBar: _buildAppBar(),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: const Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            // mainAxisAlignment: MainAxisAlignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: isCateLoading && isQuizLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _buildBody(),
+      ),
+    );
+  }
+  AppBar _buildAppBar() {
+    return AppBar(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
             children: [
-              Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Center(
-                  child: SearchField(),
+              ClipOval(
+                child: Image.network(
+                  "https://res.cloudinary.com/dvzjb1o3h/image/upload/v1727704410/x6xaehqt16rjvnvhofv3.jpg",
+                  fit: BoxFit.cover,
+                  width: 50,
+                  height: 50,
                 ),
               ),
-              SizedBox(height: 16.0),
-              Text(
-                  'Categories',
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 16.0),
-
-              CategoryCard(),
-              SizedBox(height: 16.0),
-              Text(
-                'Quizzes',
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 16.0),
-              QuizCard()
+              const SizedBox(width: 8.0),
+              const Text('Truong'),
             ],
           ),
-        ),
+          Container(
+            width: 80,
+            height: 30,
+            decoration: BoxDecoration(
+              color: Colors.lightBlue,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Center(child: Text('1000')),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _buildBody() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Center(child: SearchField()),
+          ),
+          const SizedBox(height: 16.0),
+          const Text(
+            'Categories',
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16.0),
+          SizedBox(
+            height: 120,
+            child: categories.isEmpty
+                ? const Center(
+              child: Text(
+                'No categories available.',
+                style: TextStyle(fontSize: 16.0, fontStyle: FontStyle.italic),
+              ),
+            )
+                : ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: categories.length,
+              itemBuilder: (context, index) {
+                final category = categories[index];
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: CategoryCard(
+                    title: category.title,
+                    imgUrl: category.imgUrl,
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          const Text(
+            'Quizzes',
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16.0),
+          SizedBox(
+            height: 300,
+            child: quizzes.isEmpty
+                ? const Center(
+              child: Text(
+                'No quiz available.',
+                style: TextStyle(fontSize: 16.0, fontStyle: FontStyle.italic),
+              ),
+            )
+                : ListView.builder(
+              itemCount: quizzes.length,
+              itemBuilder: (context, index) {
+                final quiz = quizzes[index];
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8, top: 8),
+                  child: QuizCard(
+                    title: quiz.title,
+                    img_url: quiz.img_url,
+                  )
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

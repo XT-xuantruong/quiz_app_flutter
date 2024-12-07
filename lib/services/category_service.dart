@@ -38,7 +38,9 @@ class CategoryService {
   Future<List<Category>> getCategories() async {
     try {
       QuerySnapshot snapshot = await _categoryCollection.get();
+      print("Fetched ${snapshot.docs.length} categories");
       return snapshot.docs.map((doc) {
+        print("Category Data: ${doc.data()}");
         return Category.fromMap(doc.data() as Map<String, dynamic>);
       }).toList();
     } catch (e) {

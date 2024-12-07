@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:quiz_app/components/category_card.dart';
 import 'package:quiz_app/components/quiz_card.dart';
 import 'package:quiz_app/models/quiz_model.dart';

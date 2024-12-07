@@ -7,6 +7,8 @@ import 'register_screen.dart';
 import 'home_screen.dart'; // Import your home screen
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -25,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _login() async {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'Please enter email and password',
             style: TextStyle(color: Colors.red),
@@ -49,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
 
       ScaffoldMessenger.of(context).showSnackBar(

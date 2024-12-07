@@ -4,7 +4,7 @@ import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
+import 'package:quiz_app/screens/login_screen.dart';
 import 'firebase_options.dart';
 
 Future<void> initializeApp() async {
@@ -111,7 +111,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home:  LoginScreen(),
     );
   }
 }

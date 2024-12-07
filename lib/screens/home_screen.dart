@@ -23,11 +23,18 @@ class _homeScreenState extends State<HomeScreen> {
   List<QuizModel> quizzes = [];
   bool isCateLoading = true;
   bool isQuizLoading = true;
+  int _selectedIndex = 0;
   @override
   void initState() {
     super.initState();
     fetchCategories();
     fetchQuizzes();
+  }
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    // You can add navigation logic based on the selected index here.
   }
 
   Future<void> fetchCategories() async {
@@ -70,6 +77,30 @@ class _homeScreenState extends State<HomeScreen> {
             ? const Center(child: CircularProgressIndicator())
             : _buildBody(),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          selectedItemColor: Colors.black,
+          unselectedItemColor: Colors.grey,
+          showUnselectedLabels: true,
+          items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.search),
+          label: 'Search',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.library_books),
+          label: 'Categories',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings),
+          label: 'Settings',
+        ),
+      ]),
     );
   }
   AppBar _buildAppBar() {

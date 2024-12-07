@@ -2,17 +2,20 @@ import 'package:cloudinary_url_gen/cloudinary.dart';
 import 'package:cloudinary_flutter/image/cld_image.dart';
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
 
 void main() async {
+  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   CloudinaryContext.cloudinary =
       Cloudinary.fromCloudName(cloudName: 'dvzjb1o3h');
+
   runApp(const MyApp());
 }
 

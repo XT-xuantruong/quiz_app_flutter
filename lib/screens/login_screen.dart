@@ -4,7 +4,8 @@ import 'dart:convert';
 import '../services/user_service.dart';
 import '../models/user_model.dart';
 import 'register_screen.dart';
-import 'home_screen.dart'; // Import your home screen
+import 'home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -48,6 +49,15 @@ class _LoginScreenState extends State<LoginScreen> {
             user.password == hashedPassword,
         orElse: () => throw Exception('Invalid credentials'),
       );
+
+      print('Email: ${authenticatedUser.email}');
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+      await prefs.setBool('isAdmin', authenticatedUser.is_admin);
+      await prefs.setString('userEmail', authenticatedUser.email);
+      await prefs.setString('userName', authenticatedUser.full_name);
+
 
       Navigator.pushReplacement(
         context,

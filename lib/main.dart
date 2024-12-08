@@ -5,6 +5,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:quiz_app/screens/login_screen.dart';
+
+import 'package:quiz_app/screens/quiz_management_screen.dart';
+import 'package:quiz_app/screens/user_management_screen.dart';
+import 'screens/home_screen.dart';
+
 import 'firebase_options.dart';
 
 Future<void> initializeApp() async {
@@ -31,7 +36,8 @@ Future<void> initializeApp() async {
 
     // 4. Initialize Cloudinary
     CloudinaryContext.cloudinary =
-        Cloudinary.fromCloudName(cloudName: 'dvzjb1o3h');
+
+        Cloudinary.fromCloudName(cloudName: 'diia1p9ou');
   } catch (e, stackTrace) {
     debugPrint('Initialization error: $e');
     debugPrint('Stack trace: $stackTrace');
@@ -110,7 +116,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginScreen(),
+
+      home: QuizManagementScreen(),
+
     );
   }
 }

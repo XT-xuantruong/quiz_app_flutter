@@ -7,7 +7,6 @@ class CategoryService {
   final CollectionReference _categoryCollection =
   FirebaseFirestore.instance.collection('category');
 
-  /// Add a new category
   Future<void> addCategory(Category category) async {
     try {
       await _categoryCollection.doc(category.id).set(category.toMap());
@@ -16,7 +15,6 @@ class CategoryService {
     }
   }
 
-  /// Update an existing category
   Future<void> updateCategory(Category category) async {
     try {
       await _categoryCollection.doc(category.id).update(category.toMap());
@@ -25,7 +23,6 @@ class CategoryService {
     }
   }
 
-  /// Delete a category by ID
   Future<void> deleteCategory(String categoryId) async {
     try {
       await _categoryCollection.doc(categoryId).delete();
@@ -34,21 +31,25 @@ class CategoryService {
     }
   }
 
-  /// Get all categories
+  final _db = FirebaseFirestore.instance;
   Future<List<Category>> getCategories() async {
     try {
-      QuerySnapshot snapshot = await _categoryCollection.get();
-      print("Fetched ${snapshot.docs.length} categories");
-      return snapshot.docs.map((doc) {
-        print("Category Data: ${doc.data()}");
-        return Category.fromMap(doc.data() as Map<String, dynamic>);
-      }).toList();
+
+      final snapshot = await _db.collection('category').get();
+      print('Số lượng document tìm thấy: ${snapshot.docs.length}');
+      return snapshot.docs.map((doc) =>
+          Category.fromMap(
+              doc.data(),
+              documentId: doc.id
+          )
+      ).toList();
+
     } catch (e) {
-      throw Exception("Error fetching categories: $e");
+      print('Error fetching categories: $e');
+      return [];
     }
   }
 
-  /// Get a category by ID
   Future<Category?> getCategoryById(String categoryId) async {
     try {
       DocumentSnapshot doc = await _categoryCollection.doc(categoryId).get();

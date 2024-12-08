@@ -4,7 +4,8 @@ import 'package:uuid/uuid.dart';
 class QuizModel {
   String id;
   String title;
-  String category_id;
+  DocumentReference category_id;
+
   String img_url;
   String description;
   final int questionCount;
@@ -20,17 +21,22 @@ class QuizModel {
     this.isCompleted = false,
   }) : id = id ?? const Uuid().v4();
 
+  // Hàm tạo từ Map, sử dụng DocumentReference cho category_id
   factory QuizModel.fromMap(Map<String, dynamic> map, String id) {
     return QuizModel(
       id: id ?? '',
       title: map['title'] ?? '',
+
+      // Trường category_id là một DocumentReference
       category_id: map['category_id'] is DocumentReference
-          ? (map['category_id'] as DocumentReference).id
-          : map['category_id'] ?? '',
+          ? map['category_id'] as DocumentReference
+          : FirebaseFirestore.instance.collection('category').doc(map['category_id'] ?? ''),
+
       img_url: map['img_url'] ?? '',
       description: map['description'] ?? '',
     );
   }
+
   QuizModel copyWith({
     int? questionCount,
     bool? isCompleted,
@@ -50,6 +56,7 @@ class QuizModel {
     return {
       'id': id,
       'title': title,
+      // Lưu trữ category_id như một DocumentReference
       'category_id': category_id,
       'img_url': img_url,
       'description': description,

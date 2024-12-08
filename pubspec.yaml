@@ -38,6 +38,12 @@ dependencies:
   cloudinary_url_gen: ^1.0.0
   flutter_dotenv: ^5.2.1
   crypto: ^3.0.2
+  shared_preferences: ^2.2.2
+  image_picker: ^1.1.2
+  file_picker: ^5.0.0
+  path_provider: ^2.0.15
+  cloudinary_public: ^0.23.1  # Add Cloudinary package
+  firebase_storage: ^12.3.7
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -70,6 +76,7 @@ flutter:
   assets:
     - assets/.env
     - assets/background.jpg
+    - assets/manage.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

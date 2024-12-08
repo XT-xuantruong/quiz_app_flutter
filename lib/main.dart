@@ -4,6 +4,7 @@ import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
+import 'package:quiz_app/screens/category_management_screen.dart';
 import 'package:quiz_app/screens/login_screen.dart';
 import 'package:quiz_app/screens/q&a_management_screen.dart';
 
@@ -118,8 +119,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
 
+      home: CategoryManagementScreen(),
 
-      home: LoginScreen(),
 
     );
   }

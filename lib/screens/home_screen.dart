@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/components/bottom_nav_bar.dart';
 
 import 'package:quiz_app/components/category_card.dart';
 import 'package:quiz_app/components/quiz_card.dart';
 import 'package:quiz_app/models/quiz_model.dart';
 import 'package:quiz_app/screens/category_list_screen.dart';
+import 'package:quiz_app/screens/profile_screen.dart';
 import 'package:quiz_app/screens/search_result_screen.dart';
 import 'package:quiz_app/services/quiz_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/searchField.dart';
 import '../models/category_model.dart';
@@ -20,6 +23,8 @@ class HomeScreen extends StatefulWidget {
 
 class _homeScreenState extends State<HomeScreen> {
   final CategoryService _categoryService = CategoryService();
+  late String userName="";
+  late String avatar = "";
   final QuizService _quizService = QuizService();
   List<Category> categories = [];
   List<QuizModel> quizzes = [];
@@ -31,26 +36,48 @@ class _homeScreenState extends State<HomeScreen> {
     super.initState();
     fetchCategories();
     fetchQuizzes();
+    getPref();
+  }
+  Future<void> getPref() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      setState(() {
+        userName =  prefs.getString("userName")!;
+        avatar = prefs.getString("userAvatar")!;
+      });
+      print(categories.map((category) => category.toMap()).toList());
+    } catch (e) {
+      print('Error get prefs: $e');
+
+    }
   }
   void _onItemTapped(int index) {
+    if (_selectedIndex == index) return;
     setState(() {
       _selectedIndex = index;
     });
     switch (index) {
       case 0:
-        // Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushReplacement(context,
+          MaterialPageRoute(
+              builder: (context) => HomeScreen()
+          ),);
         break;
       case 1:
         // Navigator.pushReplacementNamed(context, '/search');
         break;
       case 2:
-        Navigator.push(context,
+        Navigator.pushReplacement(context,
           MaterialPageRoute(
           builder: (context) => CategoryListScreen()
         ),);
         break;
       case 3:
-        // Navigator.pushReplacementNamed(context, '/settings');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const ProfileScreen()),
+        );
         break;
     }
   }
@@ -95,30 +122,10 @@ class _homeScreenState extends State<HomeScreen> {
             ? const Center(child: CircularProgressIndicator())
             : _buildBody(),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          selectedItemColor: Colors.black,
-          unselectedItemColor: Colors.grey,
-          showUnselectedLabels: true,
-          items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          label: 'Search',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.library_books),
-          label: 'Categories',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
-          label: 'Settings',
-        ),
-      ]),
+      bottomNavigationBar: BottomNavBar(
+          selectedIndex: _selectedIndex,
+          onItemTapped: _onItemTapped
+      ),
     );
   }
   AppBar _buildAppBar() {
@@ -130,6 +137,7 @@ class _homeScreenState extends State<HomeScreen> {
             children: [
               ClipOval(
                 child: Image.network(
+                  avatar.isNotEmpty  ? avatar :
                   "https://res.cloudinary.com/dvzjb1o3h/image/upload/v1727704410/x6xaehqt16rjvnvhofv3.jpg",
                   fit: BoxFit.cover,
                   width: 50,
@@ -137,7 +145,12 @@ class _homeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(width: 8.0),
-              const Text('Truong'),
+              Text(
+                  userName,
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              ),
             ],
           ),
           Container(

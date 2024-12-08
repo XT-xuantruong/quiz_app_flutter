@@ -13,8 +13,8 @@ class UserService {
     return snapshot.docs.map((doc) => UserModel.fromMap(doc.data(), doc.id)).toList();
   }
 
-  Future<void> updateUser(UserModel user) async {
-    await _db.collection('users').doc(user.id).update(user.toMap());
+  Future<void> updateUser(Map<String, dynamic> fields,String id) async {
+    await _db.collection('users').doc(id).update(fields);
   }
 
   Future<void> deleteUser(String id) async {

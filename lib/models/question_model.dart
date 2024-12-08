@@ -3,7 +3,7 @@ import 'package:uuid/uuid.dart';
 
 class QuestionModel {
   String id;
-  String quiz_id;
+  DocumentReference quiz_id;
   String question_text;
 
   QuestionModel({
@@ -14,10 +14,10 @@ class QuestionModel {
 
   factory QuestionModel.fromMap(Map<String, dynamic> map, String id) {
     return QuestionModel(
-      id: map['id'],
+      id: id,
       quiz_id: map['quiz_id'] is DocumentReference
-          ? (map['quiz_id'] as DocumentReference).id
-          : map['quiz_id'] ?? '',
+          ? (map['quiz_id'] as DocumentReference)
+          : FirebaseFirestore.instance.collection('quizzes').doc(map['quiz_id'] ?? ''),
       question_text: map['question_text'],
     );
   }

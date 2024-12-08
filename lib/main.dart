@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:quiz_app/screens/login_screen.dart';
+import 'package:quiz_app/screens/q&a_management_screen.dart';
 
 import 'package:quiz_app/screens/quiz_management_screen.dart';
 import 'package:quiz_app/screens/user_management_screen.dart';

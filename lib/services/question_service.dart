@@ -10,9 +10,12 @@ class QuestionsService {
   }
 
   Future<List<QuestionModel>> getQuestionsByQuiz(String quizId) async {
+    final quizRef = _db.collection('quizzes').doc(quizId);
+
     final snapshot = await _db.collection('questions')
-        .where('quiz_id', isEqualTo: quizId)
+        .where('quiz_id', isEqualTo: quizRef)
         .get();
+
     return snapshot.docs.map((doc) => QuestionModel.fromMap(doc.data(), doc.id)).toList();
   }
 

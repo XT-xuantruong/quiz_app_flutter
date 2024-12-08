@@ -9,9 +9,9 @@ class AnswersService {
     await _db.collection('answers').add(answer.toMap());
   }
 
-  Future<List<AnswerModel>> getAnswersByQuestion(String questionId) async {
+  Future<List<AnswerModel>> getAnswersByQuestion(DocumentReference questionRef) async {
     final snapshot = await _db.collection('answers')
-        .where('question_id', isEqualTo: questionId)
+        .where('question_id', isEqualTo: questionRef)
         .get();
     return snapshot.docs.map((doc) => AnswerModel.fromMap(doc.data(), doc.id)).toList();
   }

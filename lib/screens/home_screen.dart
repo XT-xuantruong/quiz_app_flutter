@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:quiz_app/components/category_card.dart';
 import 'package:quiz_app/components/quiz_card.dart';
 import 'package:quiz_app/models/quiz_model.dart';
+import 'package:quiz_app/screens/category_list_screen.dart';
+import 'package:quiz_app/screens/search_result_screen.dart';
 import 'package:quiz_app/services/quiz_service.dart';
 
 import '../components/searchField.dart';
@@ -34,7 +36,23 @@ class _homeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
-    // You can add navigation logic based on the selected index here.
+    switch (index) {
+      case 0:
+        // Navigator.pushReplacementNamed(context, '/home');
+        break;
+      case 1:
+        // Navigator.pushReplacementNamed(context, '/search');
+        break;
+      case 2:
+        Navigator.push(context,
+          MaterialPageRoute(
+          builder: (context) => CategoryListScreen()
+        ),);
+        break;
+      case 3:
+        // Navigator.pushReplacementNamed(context, '/settings');
+        break;
+    }
   }
 
   Future<void> fetchCategories() async {
@@ -169,6 +187,17 @@ class _homeScreenState extends State<HomeScreen> {
                   child: CategoryCard(
                     title: category.title,
                     imgUrl: category.imgUrl,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SearchResultScreen(
+                            searchTerm: category.id,
+                            isCategory: true,  // Add this parameter
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 );
               },

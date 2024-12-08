@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/screens/search_result_screen.dart';
 
 class SearchField extends StatefulWidget {
   const SearchField({super.key});
@@ -13,8 +14,11 @@ class _SearchFieldState extends State<SearchField> {
   void _search() {
     String query = _controller.text;
     if (query.isNotEmpty) {
-      // Thực hiện hành động tìm kiếm ở đây (Ví dụ: tìm kiếm trên server)
+
       print("Searching for: $query");
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => SearchResultScreen(searchTerm: query,))
+      );
     } else {
       print("Please enter a search query.");
     }
@@ -27,8 +31,10 @@ class _SearchFieldState extends State<SearchField> {
         Expanded(
           child: TextField(
             controller: _controller,
+            onSubmitted: (_) => _search(),
             decoration: InputDecoration(
               hintText: 'Search...',
+
               suffixIcon: IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: _search,

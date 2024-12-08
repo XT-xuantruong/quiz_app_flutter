@@ -114,4 +114,68 @@ class QuizService {
   Future<void> deleteQuiz(String id) async {
     await _db.collection('quizzes').doc(id).delete();
   }
+
+  Future<List<QuizModel>> searchQuizzes(String searchTerm) async {
+    try {
+      // Tìm kiếm quiz dựa vào title
+      final querySnapshot = await _db
+          .collection('quizzes')
+          .where('title', isGreaterThanOrEqualTo: searchTerm)
+          .where('title', isLessThanOrEqualTo: searchTerm + '\uf8ff')
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        return [];
+      }
+      final quizzes = querySnapshot.docs.map((doc) {
+        print('Document Data: ${doc.data()}');
+        return QuizModel.fromMap(doc.data(), doc.id);
+      }).toList();
+      final quizMoreInfo = await Future.wait(quizzes.map((quiz) async {
+        final questionCount = await QuestionsService().getQuestionCountForQuiz(quiz.id);
+        final isCompleted = await QuizResultService().getCompletionStatusForQuiz(quiz.id, "eXEy7er4I1f8yKkp5WSO");
+
+        return quiz.copyWith(
+          questionCount: questionCount,
+          isCompleted: isCompleted,
+        );
+      }));
+      return quizMoreInfo;
+    } catch (e) {
+      print('Error fetching quizzes: $e');
+      rethrow;
+    }
+  }
+  Future<List<QuizModel>> searchByCategory(String category) async {
+    try {
+      final categoryRef = _db.collection('category').doc(category);
+      final querySnapshot = await _db
+          .collection('quizzes')
+          .where('category_id', isEqualTo: categoryRef)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        return [];
+      }
+
+      final quizzes = querySnapshot.docs.map((doc) {
+        return QuizModel.fromMap(doc.data(), doc.id);
+      }).toList();
+
+      final quizMoreInfo = await Future.wait(quizzes.map((quiz) async {
+        final questionCount = await QuestionsService().getQuestionCountForQuiz(quiz.id);
+        final isCompleted = await QuizResultService().getCompletionStatusForQuiz(quiz.id, "eXEy7er4I1f8yKkp5WSO");
+
+        return quiz.copyWith(
+          questionCount: questionCount,
+          isCompleted: isCompleted,
+        );
+      }));
+
+      return quizMoreInfo;
+    } catch (e) {
+      print('Error fetching quizzes by category: $e');
+      rethrow;
+    }
+  }
 }

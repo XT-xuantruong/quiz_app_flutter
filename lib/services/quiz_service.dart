@@ -36,6 +36,58 @@ class QuizService {
     }
   }
 
+  Future<Map<String, dynamic>> getQuizDetail(String quizId) async {
+    try {
+      final quizDoc = await _db.collection('quizzes').doc(quizId).get();
+      if (!quizDoc.exists) {
+        throw Exception('Quiz not found');
+      }
+
+      final quizRef = _db.collection('quizzes').doc(quizId);
+
+      // Lấy danh sách câu hỏi liên quan đến quiz
+      final questionsSnapshot = await _db
+          .collection('questions')
+          .where('quiz_id', isEqualTo: quizRef)
+          .get();
+
+      // Với mỗi câu hỏi, lấy các câu trả lời liên quan
+      final questions = await Future.wait(questionsSnapshot.docs.map((questionDoc) async {
+        final answersSnapshot = await _db
+            .collection('answers')
+            .where('question_id', isEqualTo: _db.collection('questions').doc(questionDoc.id))
+            .get();
+
+        final answers = answersSnapshot.docs.map((answerDoc) {
+          final data = answerDoc.data();
+          return {
+            'id': answerDoc.id,
+            'answer_text': data['answer_text']?.toString() ?? 'No answer text',
+            'is_correct': data['is_correct'] ?? false,
+          };
+        }).toList();
+
+        return {
+          'id': questionDoc.id,
+          'text': questionDoc.data()['question_text'] ?? 'No question text',
+          'answers': answers,
+        };
+      }).toList());
+
+      return {
+        'quiz': {
+          'id': quizDoc.id,
+          ...quizDoc.data()!,
+        },
+        'questions': questions,
+      };
+    } catch (e) {
+      print('Error fetching quiz detail: $e');
+      rethrow;
+    }
+  }
+
+
   Future<void> updateQuiz(QuizModel quiz) async {
     await _db.collection('quizzes').doc(quiz.id).update(quiz.toMap());
   }

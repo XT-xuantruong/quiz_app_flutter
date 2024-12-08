@@ -200,6 +200,7 @@ class _homeScreenState extends State<HomeScreen> {
                     img_url: quiz.img_url,
                     question_quantity: quiz.questionCount,
                     isComplete: quiz.isCompleted,
+                    id: quiz.id,
                   )
                 );
               },

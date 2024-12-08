@@ -89,6 +89,7 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
     if (!(isAdmin ?? false)) return;
 
     try {
+      print(quiz.id);
       await _quizService.deleteQuiz(quiz.id);
       setState(() {
         _quizzes.remove(quiz);
@@ -175,7 +176,7 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
             ),
           ).then((_) => _loadQuizzes());
         },
-        child: Icon(Icons.add),
+        child: Icon(Icons.add, color: Colors.white,),
         backgroundColor: Colors.deepPurple,
       ),
     );

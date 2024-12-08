@@ -247,8 +247,8 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
               SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: _pickImage,
-                icon: Icon(Icons.image),
-                label: Text('Chọn Ảnh'),
+                icon: Icon(Icons.image, color: Colors.white,),
+                label: Text(style: TextStyle(color: Colors.white), 'Chọn Ảnh'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
                 ),
@@ -288,7 +288,7 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: Text(widget.quiz == null ? 'Tạo Quiz' : 'Cập Nhật'),
+                child: Text(style: TextStyle(color: Colors.white),widget.quiz == null ? 'Tạo Quiz' : 'Cập Nhật'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
                   minimumSize: Size(double.infinity, 50),

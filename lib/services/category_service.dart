@@ -34,6 +34,7 @@ class CategoryService {
   final _db = FirebaseFirestore.instance;
   Future<List<Category>> getCategories() async {
     try {
+
       final snapshot = await _db.collection('category').get();
       print('Số lượng document tìm thấy: ${snapshot.docs.length}');
       return snapshot.docs.map((doc) =>
@@ -42,6 +43,7 @@ class CategoryService {
               documentId: doc.id
           )
       ).toList();
+
     } catch (e) {
       print('Error fetching categories: $e');
       return [];

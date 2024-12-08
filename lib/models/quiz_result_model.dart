@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 
 class QuizResultModel {
@@ -16,8 +17,12 @@ class QuizResultModel {
   factory QuizResultModel.fromMap(Map<String, dynamic> map, String id) {
     return QuizResultModel(
       id: map['id'],
-      user_id: map['user_id'],
-      quiz_id: map['quiz_id'],
+      user_id: map['user_id'] is DocumentReference
+          ? (map['user_id'] as DocumentReference).id
+          : map['user_id'] ?? '',
+      quiz_id: map['quiz_id'] is DocumentReference
+          ? (map['quiz_id'] as DocumentReference).id
+          : map['quiz_id'] ?? '',
       score: map['score'],
     );
   }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 
 class QuestionModel {
@@ -14,7 +15,9 @@ class QuestionModel {
   factory QuestionModel.fromMap(Map<String, dynamic> map, String id) {
     return QuestionModel(
       id: map['id'],
-      quiz_id: map['quiz_id'],
+      quiz_id: map['quiz_id'] is DocumentReference
+          ? (map['quiz_id'] as DocumentReference).id
+          : map['quiz_id'] ?? '',
       question_text: map['question_text'],
     );
   }

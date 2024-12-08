@@ -5,6 +5,7 @@ class QuizModel {
   String id;
   String title;
   DocumentReference category_id;
+
   String img_url;
   String description;
   final int questionCount;
@@ -25,10 +26,12 @@ class QuizModel {
     return QuizModel(
       id: id ?? '',
       title: map['title'] ?? '',
+
       // Trường category_id là một DocumentReference
       category_id: map['category_id'] is DocumentReference
           ? map['category_id'] as DocumentReference
-          : FirebaseFirestore.instance.collection('categories').doc(map['category_id'] ?? ''),
+          : FirebaseFirestore.instance.collection('category').doc(map['category_id'] ?? ''),
+
       img_url: map['img_url'] ?? '',
       description: map['description'] ?? '',
     );

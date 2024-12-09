@@ -1,8 +1,9 @@
 import 'package:uuid/uuid.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RankingModel {
   final String id;
-  final String user_id;
+  final DocumentReference user_id;
   final int total_score;
   final String user_name;
   final String avatar;

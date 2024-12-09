@@ -6,6 +6,7 @@ import 'package:quiz_app/components/quiz_card.dart';
 import 'package:quiz_app/models/quiz_model.dart';
 import 'package:quiz_app/screens/category_list_screen.dart';
 import 'package:quiz_app/screens/profile_screen.dart';
+import 'package:quiz_app/screens/ranking.dart';
 import 'package:quiz_app/screens/search_result_screen.dart';
 import 'package:quiz_app/services/quiz_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,7 +24,7 @@ class HomeScreen extends StatefulWidget {
 
 class _homeScreenState extends State<HomeScreen> {
   final CategoryService _categoryService = CategoryService();
-  late String userName="";
+  late String userName = "";
   late String avatar = "";
   final QuizService _quizService = QuizService();
   List<Category> categories = [];
@@ -38,20 +39,21 @@ class _homeScreenState extends State<HomeScreen> {
     fetchQuizzes();
     getPref();
   }
+
   Future<void> getPref() async {
     try {
       final prefs = await SharedPreferences.getInstance();
 
       setState(() {
-        userName =  prefs.getString("userName")!;
+        userName = prefs.getString("userName")!;
         avatar = prefs.getString("userAvatar")!;
       });
       print(categories.map((category) => category.toMap()).toList());
     } catch (e) {
       print('Error get prefs: $e');
-
     }
   }
+
   void _onItemTapped(int index) {
     if (_selectedIndex == index) return;
     setState(() {
@@ -59,19 +61,22 @@ class _homeScreenState extends State<HomeScreen> {
     });
     switch (index) {
       case 0:
-        Navigator.pushReplacement(context,
-          MaterialPageRoute(
-              builder: (context) => HomeScreen()
-          ),);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
         break;
       case 1:
-        // Navigator.pushReplacementNamed(context, '/search');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Ranking()),
+        );
         break;
       case 2:
-        Navigator.pushReplacement(context,
-          MaterialPageRoute(
-          builder: (context) => CategoryListScreen()
-        ),);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => CategoryListScreen()),
+        );
         break;
       case 3:
         Navigator.pushReplacement(
@@ -84,7 +89,8 @@ class _homeScreenState extends State<HomeScreen> {
 
   Future<void> fetchCategories() async {
     try {
-      final List<Category> fetchedCategories = await _categoryService.getCategories();
+      final List<Category> fetchedCategories =
+          await _categoryService.getCategories();
       setState(() {
         categories = fetchedCategories;
         isCateLoading = false;
@@ -97,6 +103,7 @@ class _homeScreenState extends State<HomeScreen> {
       });
     }
   }
+
   Future<void> fetchQuizzes() async {
     try {
       final List<QuizModel> fetchedQuizzes = await _quizService.getQuizzes();
@@ -112,6 +119,7 @@ class _homeScreenState extends State<HomeScreen> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,11 +131,10 @@ class _homeScreenState extends State<HomeScreen> {
             : _buildBody(),
       ),
       bottomNavigationBar: BottomNavBar(
-          selectedIndex: _selectedIndex,
-          onItemTapped: _onItemTapped
-      ),
+          selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
     );
   }
+
   AppBar _buildAppBar() {
     return AppBar(
       title: Row(
@@ -137,8 +144,9 @@ class _homeScreenState extends State<HomeScreen> {
             children: [
               ClipOval(
                 child: Image.network(
-                  avatar.isNotEmpty  ? avatar :
-                  "https://res.cloudinary.com/dvzjb1o3h/image/upload/v1727704410/x6xaehqt16rjvnvhofv3.jpg",
+                  avatar.isNotEmpty
+                      ? avatar
+                      : "https://res.cloudinary.com/dvzjb1o3h/image/upload/v1727704410/x6xaehqt16rjvnvhofv3.jpg",
                   fit: BoxFit.cover,
                   width: 50,
                   height: 50,
@@ -146,7 +154,7 @@ class _homeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(width: 8.0),
               Text(
-                  userName,
+                userName,
                 style: TextStyle(
                   fontSize: 14,
                 ),
@@ -166,6 +174,7 @@ class _homeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
   Widget _buildBody() {
     return SingleChildScrollView(
       child: Column(
@@ -185,36 +194,37 @@ class _homeScreenState extends State<HomeScreen> {
             height: 120,
             child: categories.isEmpty
                 ? const Center(
-              child: Text(
-                'No categories available.',
-                style: TextStyle(fontSize: 16.0, fontStyle: FontStyle.italic),
-              ),
-            )
+                    child: Text(
+                      'No categories available.',
+                      style: TextStyle(
+                          fontSize: 16.0, fontStyle: FontStyle.italic),
+                    ),
+                  )
                 : ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                final category = categories[index];
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: CategoryCard(
-                    title: category.title,
-                    imgUrl: category.imgUrl,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SearchResultScreen(
-                            searchTerm: category.id,
-                            isCategory: true,  // Add this parameter
-                          ),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: categories.length,
+                    itemBuilder: (context, index) {
+                      final category = categories[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: CategoryCard(
+                          title: category.title,
+                          imgUrl: category.imgUrl,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SearchResultScreen(
+                                  searchTerm: category.id,
+                                  isCategory: true, // Add this parameter
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       );
                     },
                   ),
-                );
-              },
-            ),
           ),
           const SizedBox(height: 16.0),
           const Text(
@@ -226,27 +236,27 @@ class _homeScreenState extends State<HomeScreen> {
             height: 300,
             child: quizzes.isEmpty
                 ? const Center(
-              child: Text(
-                'No quiz available.',
-                style: TextStyle(fontSize: 16.0, fontStyle: FontStyle.italic),
-              ),
-            )
-                : ListView.builder(
-              itemCount: quizzes.length,
-              itemBuilder: (context, index) {
-                final quiz = quizzes[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8, top: 8),
-                  child: QuizCard(
-                    title: quiz.title,
-                    img_url: quiz.img_url,
-                    question_quantity: quiz.questionCount,
-                    isComplete: quiz.isCompleted,
-                    id: quiz.id,
+                    child: Text(
+                      'No quiz available.',
+                      style: TextStyle(
+                          fontSize: 16.0, fontStyle: FontStyle.italic),
+                    ),
                   )
-                );
-              },
-            ),
+                : ListView.builder(
+                    itemCount: quizzes.length,
+                    itemBuilder: (context, index) {
+                      final quiz = quizzes[index];
+                      return Padding(
+                          padding: const EdgeInsets.only(bottom: 8, top: 8),
+                          child: QuizCard(
+                            title: quiz.title,
+                            img_url: quiz.img_url,
+                            question_quantity: quiz.questionCount,
+                            isComplete: quiz.isCompleted,
+                            id: quiz.id,
+                          ));
+                    },
+                  ),
           ),
         ],
       ),

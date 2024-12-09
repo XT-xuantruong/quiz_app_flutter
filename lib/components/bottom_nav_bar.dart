@@ -24,8 +24,8 @@ class BottomNavBar extends StatelessWidget {
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          label: 'Search',
+          icon: Icon(Icons.bar_chart),
+          label: 'Ranking',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.library_books),

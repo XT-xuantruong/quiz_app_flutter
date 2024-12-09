@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/components/bottom_nav_bar.dart';
+import 'package:quiz_app/components/top_card.dart';
+import 'package:quiz_app/screens/profile_screen.dart';
 import '../services/ranking_service.dart';
 import '../models/ranking_model.dart';
-import '../components/rarking_cart.dart';
+import '../components/rarking_card.dart';
+import 'category_list_screen.dart';
+import 'home_screen.dart';
 
 class Ranking extends StatefulWidget {
   const Ranking({Key? key}) : super(key: key);
@@ -14,7 +19,7 @@ class _RankingState extends State<Ranking> {
   final RankingService _rankingService = RankingService();
   List<RankingModel> _rankings = [];
   bool _isLoading = true;
-
+  int _selectedIndex = 1;
   @override
   void initState() {
     super.initState();
@@ -28,11 +33,45 @@ class _RankingState extends State<Ranking> {
         _rankings = rankings;
         _isLoading = false;
       });
+      print(_rankings);
     } catch (e) {
       print('Error fetching rankings: $e');
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  void _onItemTapped(int index) {
+    if (_selectedIndex == index) return;
+    setState(() {
+      _selectedIndex = index;
+    });
+    switch (index) {
+      case 0:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+        break;
+      case 1:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Ranking()),
+        );
+        break;
+      case 2:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => CategoryListScreen()),
+        );
+        break;
+      case 3:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const ProfileScreen()),
+        );
+        break;
     }
   }
 
@@ -50,167 +89,66 @@ class _RankingState extends State<Ranking> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Stack(
+          : Column(
               children: [
-                //
                 Container(
-                  width: 498,
-                  height: 870,
-                ),
-                Positioned(
-                  top: 0,
-                  child: Container(
-                    width: 498,
-                    height: 400,
-                    decoration: const BoxDecoration(
-                      color: Colors.green,
-                    ),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Stack(
-                            children: [
-                              Container(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                        margin: const EdgeInsets.only(top: 90),
-                                        width: 90,
-                                        height: 90,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                                color: const Color.fromARGB(
-                                                    255, 9, 94, 12),
-                                                width: 6)),
-                                        child: ClipOval(
-                                            child: Image.network(
-                                          "https://res.cloudinary.com/diia1p9ou/image/upload/v1733673683/avatar/t9uvcvpbnkefb9z91zuf.jpg",
-                                          fit: BoxFit.cover,
-                                        ))),
-                                    // Image.asset(''),
-                                    Text('name'),
-                                    Text('total')
-                                  ],
-                                ),
-                              ),
-                              Positioned(
-                                left: 35,
-                                bottom: 85,
-                                child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Color.fromARGB(255, 9, 94, 12),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      '2',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          Stack(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(bottom: 180),
-                                width: 90,
-                                height: 90,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        color: const Color.fromARGB(
-                                            255, 229, 255, 0),
-                                        width: 6)),
-                              ),
-                              Positioned(
-                                left: 35,
-                                bottom: 175,
-                                child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Color.fromARGB(255, 248, 224, 10),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      '1',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          Stack(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(bottom: 90),
-                                width: 90,
-                                height: 90,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        color: const Color.fromARGB(
-                                            255, 9, 94, 12),
-                                        width: 6)),
-                              ),
-                              Positioned(
-                                left: 35,
-                                bottom: 85,
-                                child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Color.fromARGB(255, 9, 94, 12),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      '3',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ]),
+                  // padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                        ),
+                      ),
+                      Positioned(
+                          top: 25,
+                          child: TopCard(
+                            top: 2,
+                            name: _rankings[0].user_name,
+                            avatar: _rankings[0].avatar,
+                            total: _rankings[0].total_score,
+                          )),
+                      Positioned(
+                          top: 0,
+                          left: MediaQuery.of(context).size.width / 2 - 50,
+                          child: TopCard(
+                            top: 2,
+                            name: _rankings[0].user_name,
+                            avatar: _rankings[0].avatar,
+                            total: _rankings[0].total_score,
+                          )),
+                      Positioned(
+                          top: 25,
+                          right: 0,
+                          child: TopCard(
+                            top: 2,
+                            name: _rankings[0].user_name,
+                            avatar: _rankings[0].avatar,
+                            total: _rankings[0].total_score,
+                          )),
+                    ],
                   ),
                 ),
-                Positioned(
-                  top: 250,
-                  child: Container(
-                    width: 498,
-                    height: 470,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(150),
-                        topRight: Radius.circular(150),
-                      ),
-                    ),
-                    child: ListView.builder(
-                      padding: const EdgeInsets.only(top: 16),
+                SizedBox(
+                  height: 10,
+                ),
+                Expanded(
+                  child: ListView.builder(
                       itemCount: _rankings.length,
                       itemBuilder: (context, index) {
-                        final ranking = _rankings[index];
+                        final rank = _rankings[index];
                         return RankingCard(
-                          id: ranking.id,
-                          user_id: ranking.user_id,
-                          total_score: ranking.total_score,
+                          user_name: rank.user_name,
+                          total_score: rank.total_score,
+                          rank: index,
                         );
-                      },
-                    ),
-                  ),
-                ),
+                      }),
+                )
               ],
             ),
+      bottomNavigationBar: BottomNavBar(
+          selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
     );
   }
 }

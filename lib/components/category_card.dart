@@ -23,7 +23,7 @@ class _CategoryCardState extends State<CategoryCard> {
             color: const Color(0xABABC2E3),
           ),
           child: Image.network(
-              widget.imgUrl,
+            widget.imgUrl,
           ),
         ),
         SizedBox(height: 8),

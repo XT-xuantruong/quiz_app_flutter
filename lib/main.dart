@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:quiz_app/screens/login_screen.dart';
 
 import 'package:quiz_app/screens/quiz_management_screen.dart';
+import 'package:quiz_app/screens/ranking.dart';
 import 'package:quiz_app/screens/user_management_screen.dart';
 import 'screens/home_screen.dart';
 
@@ -36,7 +37,6 @@ Future<void> initializeApp() async {
 
     // 4. Initialize Cloudinary
     CloudinaryContext.cloudinary =
-
         Cloudinary.fromCloudName(cloudName: 'diia1p9ou');
   } catch (e, stackTrace) {
     debugPrint('Initialization error: $e');
@@ -46,7 +46,7 @@ Future<void> initializeApp() async {
 }
 
 void main() async {
-  runApp(const LoadingApp());  // Show loading initially
+  runApp(const LoadingApp()); // Show loading initially
   try {
     await initializeApp();
     runApp(const MyApp());
@@ -98,7 +98,6 @@ class ErrorApp extends StatelessWidget {
           ),
         ),
       ),
-
     );
   }
 }
@@ -116,9 +115,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-
-      home: QuizManagementScreen(),
-
+      home: Ranking(),
     );
   }
 }

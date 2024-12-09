@@ -57,6 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
       await prefs.setBool('isAdmin', authenticatedUser.is_admin);
       await prefs.setString('userEmail', authenticatedUser.email);
       await prefs.setString('userName', authenticatedUser.full_name);
+      await prefs.setString('userId', authenticatedUser.id);
+      await prefs.setString('userAvatar', authenticatedUser.profile_picture);
 
 
       Navigator.pushReplacement(

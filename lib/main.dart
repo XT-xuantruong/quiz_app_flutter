@@ -4,7 +4,9 @@ import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
+import 'package:quiz_app/screens/category_management_screen.dart';
 import 'package:quiz_app/screens/login_screen.dart';
+import 'package:quiz_app/screens/q&a_management_screen.dart';
 
 import 'package:quiz_app/screens/quiz_management_screen.dart';
 import 'package:quiz_app/screens/ranking.dart';
@@ -108,14 +110,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter App',
+    return const MaterialApp(
+      title: 'Quizz App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: Ranking(),
+      home: LoginScreen(),
     );
   }
 }

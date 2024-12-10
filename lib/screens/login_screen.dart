@@ -190,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       // side: BorderSide.none,
                     ),
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => RegisterScreen()),
                       );

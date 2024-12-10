@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app/components/bottom_nav_bar.dart';
-
-import 'package:quiz_app/components/category_card.dart';
-import 'package:quiz_app/components/quiz_card.dart';
-import 'package:quiz_app/models/quiz_model.dart';
-import 'package:quiz_app/screens/category_list_screen.dart';
-import 'package:quiz_app/screens/profile_screen.dart';
-import 'package:quiz_app/screens/ranking.dart';
-import 'package:quiz_app/screens/search_result_screen.dart';
-import 'package:quiz_app/services/quiz_service.dart';
+import 'package:quiz_app/models/ranking_model.dart';
+import 'package:quiz_app/services/ranking_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../components/searchField.dart';
-import '../models/category_model.dart';
-import '../services/category_service.dart';
+import '../components/category_tab.dart';
+import '../components/home_tab.dart';
+import '../components/profile_tab.dart';
+import '../components/ranking_tab.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,104 +15,59 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _homeScreenState extends State<HomeScreen> {
-  final CategoryService _categoryService = CategoryService();
-  late String userId = "";
-  late String userName = "";
-  late String avatar = "";
-  final QuizService _quizService = QuizService();
-  List<Category> categories = [];
-  List<QuizModel> quizzes = [];
-  bool isCateLoading = true;
-  bool isQuizLoading = true;
-  int _selectedIndex = 0;
+  final RankingService _rankingService = RankingService();
+  String userId = "";
+  String userName = "";
+  String avatar = "";
+  RankingModel? _rankingModel; // Changed to nullable
+  int _currentIndex = 0;
+
   @override
   void initState() {
     super.initState();
     initializeData();
   }
+
   Future<void> initializeData() async {
     await getPref();
-    await fetchCategories();
-    await fetchQuizzes();
+    if (userId.isNotEmpty) {
+      await fetchRanking();
+    }
   }
+
+  final List<Widget> _tabs = [
+    HomeTab(),
+    CategoryTab(),
+    RankingTab(),
+    ProfileTab(),
+  ];
+
   Future<void> getPref() async {
     try {
       final prefs = await SharedPreferences.getInstance();
 
       setState(() {
-        userId = prefs.getString("userId")!;
-        userName = prefs.getString("userName")!;
-        avatar = prefs.getString("userAvatar")!;
+        userId = prefs.getString("userId") ?? "";
+        userName = prefs.getString("userName") ?? "";
+        avatar = prefs.getString("userAvatar") ?? "";
       });
-      print("object $userId");
     } catch (e) {
       print('Error get prefs: $e');
     }
   }
 
-  void _onItemTapped(int index) {
-    if (_selectedIndex == index) return;
-    setState(() {
-      _selectedIndex = index;
-    });
-    switch (index) {
-      case 0:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-        break;
-      case 1:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Ranking()),
-        );
-        break;
-      case 2:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => CategoryListScreen()),
-        );
-        break;
-      case 3:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const ProfileScreen()),
-        );
-        break;
-    }
-  }
-
-  Future<void> fetchCategories() async {
+  Future<void> fetchRanking() async {
     try {
-      final List<Category> fetchedCategories =
-          await _categoryService.getCategories();
-      setState(() {
-        categories = fetchedCategories;
-        isCateLoading = false;
-      });
-    } catch (e) {
-      print('Error fetching categories: $e');
-      setState(() {
-        isCateLoading = false;
-      });
-    }
-  }
+      final RankingModel? user = await _rankingService.getRankingDetail(userId);
+      if (user != null) {
+        setState(() {
+          _rankingModel = user;
+        });
+      }
+      print("rank $user");
 
-  Future<void> fetchQuizzes() async {
-    try {
-      print(userId);
-      final List<QuizModel> fetchedQuizzes = await _quizService.getQuizzesByUser(userId);
-      setState(() {
-        quizzes = fetchedQuizzes;
-        isQuizLoading = false;
-      });
-      print(quizzes.map((quizz) => quizz.toMap()).toList());
     } catch (e) {
-      print('Error fetching categories: $e');
-      setState(() {
-        isQuizLoading = false;
-      });
+      print('Error fetching user ranking: $e');
     }
   }
 
@@ -128,142 +75,83 @@ class _homeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: isCateLoading && isQuizLoading
-            ? const Center(child: CircularProgressIndicator())
-            : _buildBody(),
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _tabs,
       ),
-      bottomNavigationBar: BottomNavBar(
-          selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.category), label: 'Category'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.leaderboard), label: 'Ranking'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+      ),
     );
   }
 
   AppBar _buildAppBar() {
-    return AppBar(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
+    switch (_currentIndex) {
+      case 0:
+        return AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ClipOval(
-                child: Image.network(
-                  avatar.isNotEmpty
-                      ? avatar
-                      : "https://res.cloudinary.com/dvzjb1o3h/image/upload/v1727704410/x6xaehqt16rjvnvhofv3.jpg",
-                  fit: BoxFit.cover,
-                  width: 50,
-                  height: 50,
-                ),
+              Row(
+                children: [
+                  ClipOval(
+                    child: Image.network(
+                      avatar.isNotEmpty
+                          ? avatar
+                          : "https://res.cloudinary.com/dvzjb1o3h/image/upload/v1727704410/x6xaehqt16rjvnvhofv3.jpg",
+                      fit: BoxFit.cover,
+                      width: 50,
+                      height: 50,
+                    ),
+                  ),
+                  const SizedBox(width: 8.0),
+                  Text(
+                    userName,
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 8.0),
-              Text(
-                userName,
-                style: TextStyle(
-                  fontSize: 14,
+              Container(
+                width: 80,
+                height: 30,
+                decoration: BoxDecoration(
+                  color: Colors.lightBlue,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Text(
+                    _rankingModel?.total_score.toString() ?? "0",
+                  ),
                 ),
               ),
             ],
           ),
-          Container(
-            width: 80,
-            height: 30,
-            decoration: BoxDecoration(
-              color: Colors.lightBlue,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Center(child: Text('1000')),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBody() {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Center(child: SearchField()),
-          ),
-          const SizedBox(height: 16.0),
-          const Text(
-            'Categories',
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16.0),
-          SizedBox(
-            height: 120,
-            child: categories.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No categories available.',
-                      style: TextStyle(
-                          fontSize: 16.0, fontStyle: FontStyle.italic),
-                    ),
-                  )
-                : ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: categories.length,
-                    itemBuilder: (context, index) {
-                      final category = categories[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: CategoryCard(
-                          title: category.title,
-                          imgUrl: category.imgUrl,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SearchResultScreen(
-                                  searchTerm: category.id,
-                                  isCategory: true, // Add this parameter
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
-          ),
-          const SizedBox(height: 16.0),
-          const Text(
-            'Quizzes',
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16.0),
-          SizedBox(
-            height: 300,
-            child: quizzes.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No quiz available.',
-                      style: TextStyle(
-                          fontSize: 16.0, fontStyle: FontStyle.italic),
-                    ),
-                  )
-                : ListView.builder(
-                    itemCount: quizzes.length,
-                    itemBuilder: (context, index) {
-                      final quiz = quizzes[index];
-                      return Padding(
-                          padding: const EdgeInsets.only(bottom: 8, top: 8),
-                          child: QuizCard(
-                            title: quiz.title,
-                            img_url: quiz.img_url,
-                            question_quantity: quiz.questionCount,
-                            isComplete: quiz.isCompleted,
-                            id: quiz.id,
-                          ));
-                    },
-                  ),
-          ),
-        ],
-      ),
-    );
+        );
+      case 1:
+        return AppBar(title: const Text('Quiz App'));
+      case 2:
+        return AppBar(title: const Text('Leaderboard'));
+      case 3:
+        return AppBar(title: const Text('Quiz App'));
+      default:
+        return AppBar(title: const Text('Quiz App'));
+    }
   }
 }

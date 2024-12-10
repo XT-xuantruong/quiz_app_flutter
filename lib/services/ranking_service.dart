@@ -7,10 +7,63 @@ class RankingService {
   Future<void> addRanking(RankingModel ranking) async {
     await _db.collection('rankings').add(ranking.toMap());
   }
+  Future<RankingModel?> getRankingDetail(String userId) async {
+    try {
+      final userRe = _db.collection('users').doc(userId);
+      final querySnapshot = await _db
+          .collection('rankings')
+          .where('user_id', isEqualTo: userRe.path)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        return null;
+      }
+
+      final rankingDoc = querySnapshot.docs.first;
+      final rankingData = rankingDoc.data();
+
+      // Get user reference
+      DocumentReference userRef;
+      if (rankingData['user_id'] is String) {
+        userRef = FirebaseFirestore.instance.doc(rankingData['user_id']);
+      } else if (rankingData['user_id'] is DocumentReference) {
+        userRef = rankingData['user_id'];
+      } else {
+        throw Exception("Invalid user_id format for ranking ${rankingDoc.id}");
+      }
+
+      try {
+
+        final userDoc = await userRef.get();
+        final userData = userDoc.data() as Map<String, dynamic>;
+
+        // Create and return RankingModel with complete information
+        return RankingModel.fromMap({
+          ...rankingData,
+          'user_id': userRef.path,
+          'user_name': userData['full_name'] ?? 'Unknown',
+          'avatar': userData['profile_picture']
+        }, rankingDoc.id);
+
+      } catch (e) {
+        print('Error fetching user data for ranking ${rankingDoc.id}: $e');
+        // Return ranking with default user data on error
+        return RankingModel.fromMap({
+          ...rankingData,
+          'user_id': userRef.path,
+          'user_name': '',
+          'avatar': ''
+        }, rankingDoc.id);
+      }
+    } catch (e) {
+      print('Error fetching ranking detail: $e');
+      return null;
+    }
+  }
 
   Future<List<RankingModel>> getRankings() async {
     try {
-      // Get rankings ordered by score in descending order
+
       final rankingSnapshot = await _db
           .collection('rankings')
           .orderBy('total_score', descending: true)

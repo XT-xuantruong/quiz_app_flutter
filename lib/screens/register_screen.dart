@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:quiz_app/models/ranking_model.dart';
+import 'package:quiz_app/services/ranking_service.dart';
 import '../services/user_service.dart';
 import '../models/user_model.dart';
 import 'login_screen.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -29,7 +31,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _emailController.text.isEmpty ||
         _passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(style: TextStyle(color: Colors.red), 'Please enter full information')),
+        SnackBar(
+            content: Text(
+                style: TextStyle(color: Colors.red),
+                'Please enter full information')),
       );
       return;
     }
@@ -37,28 +42,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
     try {
       String hashedPassword = _hashPassword(_passwordController.text);
 
-      UserModel newUser = UserModel(
-        email: _emailController.text,
-        full_name: _nameController.text,
-        password: hashedPassword,
-        is_admin: false,
-        profile_picture: '',
-      );
+      DocumentReference userRef =
+          await FirebaseFirestore.instance.collection('users').add({
+        'email': _emailController.text,
+        'full_name': _nameController.text,
+        'password': hashedPassword,
+        'is_admin': false,
+        'profile_picture': '',
+      });
 
-      await _userService.addUser(newUser);
+      print(userRef.id);
+      // Convert to DocumentReference
+
+      RankingModel newRanking = RankingModel(
+          user_name: _nameController.text,
+          user_id: userRef,
+          total_score: 0,
+          avatar: '');
+
+      await RankingService().addRanking(newRanking);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(style: TextStyle(color: Colors.green),'Register successfully')),
+        SnackBar(
+            content: Text(
+                style: TextStyle(color: Colors.green),
+                'Register successfully')),
       );
 
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => LoginScreen()),
-              (route) => false
-      );
+          (route) => false);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(style: TextStyle(color: Colors.red), 'Register failed: ${e.toString()}')),
+        SnackBar(
+            content: Text(
+                style: TextStyle(color: Colors.red),
+                'Register failed: ${e.toString()}')),
       );
     }
   }
@@ -112,7 +132,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     filled: true,
                     fillColor: Colors.transparent,
-                    contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
                   ),
                 ),
                 SizedBox(height: 16.0),
@@ -128,7 +149,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     filled: true,
                     fillColor: Colors.transparent,
-                    contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
                   ),
                 ),
                 SizedBox(height: 16.0),
@@ -145,7 +167,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     filled: true,
                     fillColor: Colors.transparent,
-                    contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
                   ),
                 ),
                 SizedBox(height: 24.0),
@@ -155,7 +178,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onPressed: _registerUser,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amber[400],
-                      padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 16.0, horizontal: 32.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),

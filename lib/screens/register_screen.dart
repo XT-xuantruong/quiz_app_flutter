@@ -56,7 +56,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       RankingModel newRanking = RankingModel(
           user_name: _nameController.text,
-          user_id: userRef,
+          user_id: userRef.path,
           total_score: 0,
           avatar: '');
 

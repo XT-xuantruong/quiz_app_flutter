@@ -33,9 +33,29 @@ class QuizService {
         print('Document Data: ${doc.data()}');
         return QuizModel.fromMap(doc.data(), doc.id);
       }).toList();
+          return quizzes;
+    } catch (e) {
+      print('Error fetching quizzes: $e');
+      rethrow;
+    }
+  }
+  Future<List<QuizModel>> getQuizzesByUser(String userId) async {
+    try {
+      if (userId.isEmpty) {
+        throw ArgumentError('userId must not be empty');
+      }
+      final snapshot = await _db.collection('quizzes').get();
+      if (snapshot.docs.isEmpty) {
+        print('No quizzes found in Firestore');
+      }
+      final quizzes = snapshot.docs.map((doc) {
+        print('Document Data: ${doc.data()}');
+        return QuizModel.fromMap(doc.data(), doc.id);
+      }).toList();
+      print(userId);
       final quizMoreInfo = await Future.wait(quizzes.map((quiz) async {
         final questionCount = await QuestionsService().getQuestionCountForQuiz(quiz.id);
-        final isCompleted = await QuizResultService().getCompletionStatusForQuiz(quiz.id, "eXEy7er4I1f8yKkp5WSO");
+        final isCompleted = await QuizResultService().getCompletionStatusForQuiz(quiz.id, userId);
 
         return quiz.copyWith(
           questionCount: questionCount,
@@ -75,7 +95,7 @@ class QuizService {
           final data = answerDoc.data();
           return {
             'id': answerDoc.id,
-            'answer_text': data['answer_text']?.toString() ?? 'No answer text',
+            'option_text': data['option_text']?.toString() ?? 'No answer text',
             'is_correct': data['is_correct'] ?? false,
           };
         }).toList();

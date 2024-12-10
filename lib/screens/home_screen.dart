@@ -24,6 +24,7 @@ class HomeScreen extends StatefulWidget {
 
 class _homeScreenState extends State<HomeScreen> {
   final CategoryService _categoryService = CategoryService();
+  late String userId = "";
   late String userName = "";
   late String avatar = "";
   final QuizService _quizService = QuizService();
@@ -35,20 +36,23 @@ class _homeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    fetchCategories();
-    fetchQuizzes();
-    getPref();
+    initializeData();
   }
-
+  Future<void> initializeData() async {
+    await getPref();
+    await fetchCategories();
+    await fetchQuizzes();
+  }
   Future<void> getPref() async {
     try {
       final prefs = await SharedPreferences.getInstance();
 
       setState(() {
+        userId = prefs.getString("userId")!;
         userName = prefs.getString("userName")!;
         avatar = prefs.getString("userAvatar")!;
       });
-      print(categories.map((category) => category.toMap()).toList());
+      print("object $userId");
     } catch (e) {
       print('Error get prefs: $e');
     }
@@ -95,7 +99,6 @@ class _homeScreenState extends State<HomeScreen> {
         categories = fetchedCategories;
         isCateLoading = false;
       });
-      print(categories.map((category) => category.toMap()).toList());
     } catch (e) {
       print('Error fetching categories: $e');
       setState(() {
@@ -106,7 +109,8 @@ class _homeScreenState extends State<HomeScreen> {
 
   Future<void> fetchQuizzes() async {
     try {
-      final List<QuizModel> fetchedQuizzes = await _quizService.getQuizzes();
+      print(userId);
+      final List<QuizModel> fetchedQuizzes = await _quizService.getQuizzesByUser(userId);
       setState(() {
         quizzes = fetchedQuizzes;
         isQuizLoading = false;

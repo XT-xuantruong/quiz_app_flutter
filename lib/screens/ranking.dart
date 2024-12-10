@@ -89,64 +89,77 @@ class _RankingState extends State<Ranking> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
+          : _rankings.isEmpty
+          ? const Center(
+        child: Text(
+          'No rankings available!',
+          style: TextStyle(fontSize: 18),
+        ),
+      )
           : Column(
+        children: [
+          Container(
+            child: Stack(
               children: [
                 Container(
-                  // padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: 200,
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                        ),
-                      ),
-                      Positioned(
-                          top: 25,
-                          child: TopCard(
-                            top: 2,
-                            name: _rankings[0].user_name,
-                            avatar: _rankings[0].avatar,
-                            total: _rankings[0].total_score,
-                          )),
-                      Positioned(
-                          top: 0,
-                          left: MediaQuery.of(context).size.width / 2 - 50,
-                          child: TopCard(
-                            top: 2,
-                            name: _rankings[0].user_name,
-                            avatar: _rankings[0].avatar,
-                            total: _rankings[0].total_score,
-                          )),
-                      Positioned(
-                          top: 25,
-                          right: 0,
-                          child: TopCard(
-                            top: 2,
-                            name: _rankings[0].user_name,
-                            avatar: _rankings[0].avatar,
-                            total: _rankings[0].total_score,
-                          )),
-                    ],
+                  height: 200,
+                  decoration: const BoxDecoration(
+                    color: Colors.green,
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                      itemCount: _rankings.length,
-                      itemBuilder: (context, index) {
-                        final rank = _rankings[index];
-                        return RankingCard(
-                          user_name: rank.user_name,
-                          total_score: rank.total_score,
-                          rank: index,
-                        );
-                      }),
-                )
+                if (_rankings.length > 0)
+                  Positioned(
+                    top: 0,
+                    left: MediaQuery.of(context).size.width / 2 - 50,
+                    child: TopCard(
+                      top: 1,
+                      name: _rankings[0].user_name,
+                      avatar: _rankings[0].avatar,
+                      total: _rankings[0].total_score,
+                    ),
+                  ),
+                if (_rankings.length > 1)
+                  Positioned(
+                    top: 25,
+                    left: 16,
+                    child: TopCard(
+                      top: 2,
+                      name: _rankings[1].user_name,
+                      avatar: _rankings[1].avatar,
+                      total: _rankings[1].total_score,
+                    ),
+                  ),
+                if (_rankings.length > 2)
+                  Positioned(
+                    top: 25,
+                    right: 16,
+                    child: TopCard(
+                      top: 3,
+                      name: _rankings[2].user_name,
+                      avatar: _rankings[2].avatar,
+                      total: _rankings[2].total_score,
+                    ),
+                  ),
               ],
             ),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _rankings.length - 3 > 0 ? _rankings.length - 3 : 0,
+              itemBuilder: (context, index) {
+                final rank = _rankings[index + 3]; // Lấy từ Top 4
+                return RankingCard(
+                  user_name: rank.user_name,
+                  total_score: rank.total_score,
+                  rank: index + 4, // Xếp hạng từ Top 4 trở đi
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+
       bottomNavigationBar: BottomNavBar(
           selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
     );

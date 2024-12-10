@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 
 class RankingModel {
@@ -9,10 +10,10 @@ class RankingModel {
 
   RankingModel({
     String? id,
-    required this.user_name,
+    this.user_name ="",
     required this.user_id,
     required this.total_score,
-    required this.avatar,
+    this.avatar ="",
   }) : id = id ?? const Uuid().v4();
 
   factory RankingModel.fromMap(Map<String, dynamic> map, String id) {
@@ -20,9 +21,8 @@ class RankingModel {
       id: map['id'],
       user_id: map['user_id'] ?? "",
       total_score: map['total_score'] ?? 0,
-      user_name: map['user_name'] ?? 'Unknown',
-      avatar: map['avatar'] ??
-          'https://res.cloudinary.com/dvzjb1o3h/image/upload/v1727704410/x6xaehqt16rjvnvhofv3.jpg',
+      user_name: map['user_name'] ?? '',
+      avatar: map['avatar'] ??'',
     );
   }
 

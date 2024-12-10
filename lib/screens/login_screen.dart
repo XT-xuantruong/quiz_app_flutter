@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
         orElse: () => throw Exception('Invalid credentials'),
       );
 
-      print('Email: ${authenticatedUser.email}');
+      print('Email: ${authenticatedUser.id}');
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
       await prefs.setString('userName', authenticatedUser.full_name);
       await prefs.setString('userId', authenticatedUser.id);
       await prefs.setString('userAvatar', authenticatedUser.profile_picture);
-
+      print('1: ${await prefs.get("userId")}');
 
       Navigator.pushReplacement(
         context,

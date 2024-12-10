@@ -10,29 +10,41 @@ class RankingService {
 
   Future<List<RankingModel>> getRankings() async {
     try {
-      final rankingSnapshot = await _db.collection('rankings').get();
+      // Get rankings ordered by score in descending order
+      final rankingSnapshot = await _db
+          .collection('rankings')
+          .orderBy('total_score', descending: true)
+          .get();
+      print(" 1 $rankingSnapshot");
+      if (rankingSnapshot.docs.isEmpty) {
+        return [];
+      }
 
       List<Future<RankingModel>> rankingFutures = rankingSnapshot.docs.map((doc) async {
         final rankingData = doc.data();
-
-        // Get the DocumentReference from user_id field
-        DocumentReference userRef = rankingData['user_id'];
-
+        // Kiểm tra và chuyển đổi user_id từ String thành DocumentReference
+        DocumentReference userRef;
+        if (rankingData['user_id'] is String) {
+          userRef = FirebaseFirestore.instance.doc(rankingData['user_id']); // Chuyển đổi từ String
+        } else if (rankingData['user_id'] is DocumentReference) {
+          userRef = rankingData['user_id']; // Đã là DocumentReference
+        } else {
+          throw Exception("Invalid user_id format for ranking ${doc.id}");
+        }
         try {
-          // Fetch user document
           final userDoc = await userRef.get();
           final userData = userDoc.data() as Map<String, dynamic>;
 
-          // Create RankingModel with user data
           return RankingModel.fromMap({
             ...rankingData,
             'user_id': userRef.path, // Convert reference to path string
             'user_name': userData['full_name'] ?? 'Unknown',
             'avatar': userData['profile_picture']
           }, doc.id);
+
         } catch (e) {
-          print('Error fetching user data: $e');
-          // Return ranking with default user name if user fetch fails
+          print('Error fetching user data for ranking ${doc.id}: $e');
+          // Return ranking with default user data on error
           return RankingModel.fromMap({
             ...rankingData,
             'user_id': userRef.path,
@@ -42,16 +54,39 @@ class RankingService {
         }
       }).toList();
 
-      return Future.wait(rankingFutures);
+      return await Future.wait(rankingFutures);
+
     } catch (e) {
-      print('Error in getRankings: $e');
-      throw e;
+      print('Error fetching rankings: $e');
+      return [];
     }
   }
 
 
+
   Future<void> updateRanking(RankingModel ranking) async {
-    await _db.collection('rankings').doc(ranking.id).update(ranking.toMap());
+    final querySnapshot = await _db
+        .collection('rankings')
+        .where('user_id', isEqualTo: ranking.user_id)
+        .get();
+
+    if (querySnapshot.docs.isEmpty) {
+      // Create new ranking if user doesn't have one
+      await _db.collection('rankings').add(ranking.toMap());
+    } else {
+      // Get the current document
+      final currentDoc = querySnapshot.docs.first;
+      final currentData = currentDoc.data();
+
+      // Add the new score to the existing total
+      final int currentTotal = currentData['total_score'] ?? 0;
+      final int newTotal = currentTotal + ranking.total_score;
+
+      // Update existing ranking with accumulated score
+      await _db.collection('rankings').doc(currentDoc.id).update({
+        'total_score': newTotal,
+      });
+    }
   }
 
   Future<void> deleteRanking(String id) async {

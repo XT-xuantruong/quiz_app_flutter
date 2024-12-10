@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:quiz_app/services/ranking_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/quiz_options.dart';
 import '../components/quiz_timer.dart';
 import '../models/quiz_result_model.dart';
+import '../models/ranking_model.dart';
 import '../services/quiz_result_service.dart';
 import '../services/quiz_service.dart';
 
@@ -28,11 +31,27 @@ class _QuizScreenState extends State<QuizScreen> {
   Map<String, dynamic>? quizData;
   List<Map<String, dynamic>> questions = [];
   int score = 0;
-
+  late String userId = "";
   @override
   void initState() {
     super.initState();
-    _fetchQuizDetail();
+    initializeData();
+  }
+  Future<void> initializeData() async {
+    await getPref();
+    await _fetchQuizDetail();
+  }
+  Future<void> getPref() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      setState(() {
+        userId = prefs.getString("userId")!;
+      });
+      print("object $userId");
+    } catch (e) {
+      print('Error get prefs: $e');
+    }
   }
 
   Future<void> _fetchQuizDetail() async {
@@ -53,9 +72,9 @@ class _QuizScreenState extends State<QuizScreen> {
         return {
           'id': question['id'],
           'question': question['text'],
-          'options': answers.map((a) => a['answer_text'].toString()).toList(),
+          'options': answers.map((a) => a['option_text'].toString()).toList(),
           'correctAnswer': answers
-              .firstWhere((a) => a['is_correct'] == true)['answer_text'],
+              .firstWhere((a) => a['is_correct'] == true)['option_text'],
         };
       }).toList();
       print('Formatted Questions: $formattedQuestions');
@@ -75,9 +94,10 @@ class _QuizScreenState extends State<QuizScreen> {
 
   Future<void> saveQuizResult() async {
     final QuizResultService quizResultService = QuizResultService();
+    final RankingService rankingService = RankingService();
     // Tham chiếu đến tài liệu người dùng và quiz
     final DocumentReference userRef =
-    FirebaseFirestore.instance.collection('users').doc('eXEy7er4I1f8yKkp5WSO');
+    FirebaseFirestore.instance.collection('users').doc(userId);
     final DocumentReference quizRef =
     FirebaseFirestore.instance.collection('quizzes').doc(widget.id);
 
@@ -86,9 +106,14 @@ class _QuizScreenState extends State<QuizScreen> {
       quiz_id: quizRef,
       score: score,
     );
+    final ranking = RankingModel(
+      total_score: score,
+      user_id: userRef.path,
+    );
 
     try {
       await quizResultService.addQuizResult(result);
+      await rankingService.updateRanking(ranking);
       print('Quiz result saved successfully');
     } catch (e) {
       print('Error saving quiz result: $e');

@@ -200,6 +200,10 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
     );
   }
 
+  Future<List<QuestionModel>> countQuestion(QuizModel quiz) async {
+    return await _questionService.getQuestionsByQuiz(quiz.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!_isAdmin) {
@@ -275,14 +279,18 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: ListTile(
             title: Text("QUIZ: " + quiz.title),
-            subtitle: Text('Number of questions: ${quiz.questionCount}'),
+            subtitle: FutureBuilder<List<QuestionModel>>(
+              future: _questionService.getQuestionsByQuiz(quiz.id),
+              builder: (context, snapshot) {
+                return Text('Number of questions: ${snapshot.data?.length ?? 0}');
+              },
+            ),
             onTap: () => _loadQuestionsByQuiz(quiz),
           ),
         );
       },
     );
   }
-
   Widget _buildQuestionList() {
     if (_questions.isEmpty) {
       return Center(

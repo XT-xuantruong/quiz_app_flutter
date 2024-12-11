@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../screens/category_management_screen.dart';
 import '../screens/edit_profile_screen.dart';
 import '../screens/login_screen.dart';
+import '../screens/q&a_management_screen.dart';
+import '../screens/quiz_management_screen.dart';
+import '../screens/user_management_screen.dart';
 
 class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
@@ -16,6 +20,7 @@ class _ProfileTabState extends State<ProfileTab> {
   late String avatar = "";
   late String email = "";
   late String id = "";
+  late bool isAdmin = false;
 
   @override
   void initState() {
@@ -30,6 +35,7 @@ class _ProfileTabState extends State<ProfileTab> {
         userName =  prefs.getString("userName")!;
         avatar = prefs.getString("userAvatar")!;
         email = prefs.getString("userEmail")!;
+        isAdmin=prefs.getBool("isAdmin")!;
         id =  prefs.getString("userId")!;
       });
 
@@ -85,7 +91,7 @@ class _ProfileTabState extends State<ProfileTab> {
         ),
         const SizedBox(height: 10),
         Text(
-          userName,
+          isAdmin? userName+' (Admin)': '' ,
           style: const TextStyle(
             // color: Colors.white,
             fontSize: 20,
@@ -127,8 +133,121 @@ class _ProfileTabState extends State<ProfileTab> {
             },
           ),
         ),
-
-        const SizedBox(height: 20),
+        SizedBox(height: 16,),
+        if (isAdmin) ...[
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              // color: Colors.white.withOpacity(0.1),
+              border: Border.all(),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ListTile(
+              leading: const Icon(Icons.quiz,),
+              title: const Text(
+                'Quiz management',
+                // style: TextStyle(color: Colors.white),
+              ),
+              trailing: const Icon(Icons.chevron_right,),
+              onTap: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => QuizManagementScreen(),
+                  ),
+                );
+                if (result == true) {
+                  getPref();
+                }
+              },
+            ),
+          ),
+          SizedBox(height: 16,),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              // color: Colors.white.withOpacity(0.1),
+              border: Border.all(),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ListTile(
+              leading: const Icon(Icons.question_answer,),
+              title: const Text(
+                'Question and answer management',
+                // style: TextStyle(color: Colors.white),
+              ),
+              trailing: const Icon(Icons.chevron_right,),
+              onTap: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => QAManagementScreen(),
+                  ),
+                );
+                if (result == true) {
+                  getPref();
+                }
+              },
+            ),
+          ),
+          SizedBox(height: 16,),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              // color: Colors.white.withOpacity(0.1),
+              border: Border.all(),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ListTile(
+              leading: const Icon(Icons.category,),
+              title: const Text(
+                'Category management',
+                // style: TextStyle(color: Colors.white),
+              ),
+              trailing: const Icon(Icons.chevron_right,),
+              onTap: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CategoryManagementScreen(),
+                  ),
+                );
+                if (result == true) {
+                  getPref();
+                }
+              },
+            ),
+          ),
+          SizedBox(height: 16,),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              // color: Colors.white.withOpacity(0.1),
+              border: Border.all(),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ListTile(
+              leading: const Icon(Icons.supervised_user_circle,),
+              title: const Text(
+                'User management',
+                // style: TextStyle(color: Colors.white),
+              ),
+              trailing: const Icon(Icons.chevron_right,),
+              onTap: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UserManagementScreen(),
+                  ),
+                );
+                if (result == true) {
+                  getPref();
+                }
+              },
+            ),
+          ),
+          const SizedBox(height: 20),
+        ],
         Container(
           margin: EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(

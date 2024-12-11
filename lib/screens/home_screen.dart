@@ -96,6 +96,7 @@ class _homeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
               icon: Icon(Icons.leaderboard), label: 'Ranking'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+
         ],
       ),
     );

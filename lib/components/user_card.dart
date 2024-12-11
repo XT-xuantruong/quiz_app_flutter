@@ -15,7 +15,7 @@ class UserListComponent extends StatelessWidget {
   Widget _buildAvatar(String email) {
     return CircleAvatar(
       radius: 25,
-      backgroundImage: AssetImage('assets/background.jpg'),
+      backgroundImage: const AssetImage('assets/background.jpg'),
       child: Container(),
     );
   }
@@ -32,7 +32,7 @@ class UserListComponent extends StatelessWidget {
             size: 100,
             color: Colors.grey.shade300,
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             'No Users',
             style: TextStyle(
@@ -55,7 +55,7 @@ class UserListComponent extends StatelessWidget {
       itemBuilder: (context, index) {
         UserModel user = users[index];
         return Container(
-          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -63,30 +63,30 @@ class UserListComponent extends StatelessWidget {
               BoxShadow(
                 color: Colors.grey.shade200,
                 blurRadius: 4,
-                offset: Offset(0, 2),
+                offset: const Offset(0, 2),
               ),
             ],
           ),
           child: ListTile(
             leading: _buildAvatar(user.email),
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             title: Column(
               children: [
                 Text(
                   user.full_name,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Text(
                     user.email,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black87,
                     )
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Text(
                   user.is_admin ? 'Admin' : 'User',
                   style: TextStyle(

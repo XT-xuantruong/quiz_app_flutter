@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:quiz_app/themes/app_colors.dart';
+
 class QuizTimer extends StatefulWidget {
   final int timeRemaining; // Nhận giá trị thời gian còn lại từ QuizScreen
   final Function() onTimerComplete;
@@ -58,7 +60,7 @@ class _QuizTimerState extends State<QuizTimer> {
             CircularProgressIndicator(
               value: _timeRemaining / widget.timeRemaining, // Vẽ vòng tròn theo thời gian còn lại
               backgroundColor: Colors.grey[300],
-              color: const Color(0xFF1D6156),
+              color: AppColors.primaryColor,
               strokeWidth: 8,
             ),
             Center(

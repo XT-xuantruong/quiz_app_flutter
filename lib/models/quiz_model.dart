@@ -24,7 +24,7 @@ class QuizModel {
   // Hàm tạo từ Map, sử dụng DocumentReference cho category_id
   factory QuizModel.fromMap(Map<String, dynamic> map, String id) {
     return QuizModel(
-      id: id ?? '',
+      id: id,
       title: map['title'] ?? '',
 
       // Trường category_id là một DocumentReference

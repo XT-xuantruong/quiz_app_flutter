@@ -91,16 +91,16 @@ class _ProfileTabState extends State<ProfileTab> {
         ),
         const SizedBox(height: 10),
         Text(
-          isAdmin? userName+' (Admin)': '' ,
+          isAdmin? '$userName (Admin)': '' ,
           style: const TextStyle(
             // color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 16,),
+        const SizedBox(height: 16,),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 16),
+          margin: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
             // color: Colors.white.withOpacity(0.1),
             border: Border.all(),
@@ -133,10 +133,10 @@ class _ProfileTabState extends State<ProfileTab> {
             },
           ),
         ),
-        SizedBox(height: 16,),
+        const SizedBox(height: 16,),
         if (isAdmin) ...[
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 16),
+            margin: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               // color: Colors.white.withOpacity(0.1),
               border: Border.all(),
@@ -162,9 +162,9 @@ class _ProfileTabState extends State<ProfileTab> {
               },
             ),
           ),
-          SizedBox(height: 16,),
+          const SizedBox(height: 16,),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 16),
+            margin: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               // color: Colors.white.withOpacity(0.1),
               border: Border.all(),
@@ -181,7 +181,7 @@ class _ProfileTabState extends State<ProfileTab> {
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => QAManagementScreen(),
+                    builder: (context) => const QAManagementScreen(),
                   ),
                 );
                 if (result == true) {
@@ -190,9 +190,9 @@ class _ProfileTabState extends State<ProfileTab> {
               },
             ),
           ),
-          SizedBox(height: 16,),
+          const SizedBox(height: 16,),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 16),
+            margin: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               // color: Colors.white.withOpacity(0.1),
               border: Border.all(),
@@ -209,7 +209,7 @@ class _ProfileTabState extends State<ProfileTab> {
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CategoryManagementScreen(),
+                    builder: (context) => const CategoryManagementScreen(),
                   ),
                 );
                 if (result == true) {
@@ -218,9 +218,9 @@ class _ProfileTabState extends State<ProfileTab> {
               },
             ),
           ),
-          SizedBox(height: 16,),
+          const SizedBox(height: 16,),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 16),
+            margin: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               // color: Colors.white.withOpacity(0.1),
               border: Border.all(),
@@ -249,7 +249,7 @@ class _ProfileTabState extends State<ProfileTab> {
           const SizedBox(height: 20),
         ],
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 16),
+          margin: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
             // color: Colors.white.withOpacity(0.1),
             border: Border.all(),

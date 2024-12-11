@@ -2,14 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloudinary_public/cloudinary_public.dart';
 
 import 'dart:io';
 import 'package:flutter/foundation.dart'; // For platform check
 
 import '../models/quiz_model.dart';
-import '../models/category_model.dart';
 import '../services/category_service.dart';
 import '../services/quiz_service.dart';
 

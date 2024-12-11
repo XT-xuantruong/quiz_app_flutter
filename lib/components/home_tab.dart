@@ -8,6 +8,7 @@ import '../models/quiz_model.dart';
 import '../screens/search_result_screen.dart';
 import '../services/category_service.dart';
 import '../services/quiz_service.dart';
+import '../themes/app_colors.dart';
 import 'category_card.dart';
 
 class HomeTab extends StatefulWidget {
@@ -60,7 +61,7 @@ class _HomeTabState extends State<HomeTab> {
   Future<void> fetchCategories() async {
     try {
       final List<Category> fetchedCategories =
-      await _categoryService.getCategories();
+          await _categoryService.getCategories();
       setState(() {
         categories = fetchedCategories;
         isCateLoading = false;
@@ -76,7 +77,8 @@ class _HomeTabState extends State<HomeTab> {
   Future<void> fetchQuizzes() async {
     try {
       print(userId);
-      final List<QuizModel> fetchedQuizzes = await _quizService.getQuizzesByUser(userId);
+      final List<QuizModel> fetchedQuizzes =
+          await _quizService.getQuizzesByUser(userId);
       setState(() {
         quizzes = fetchedQuizzes;
         isQuizLoading = false;
@@ -93,96 +95,116 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: const BoxDecoration(
+        color: AppColors.backgroundColor,
+      ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: isCateLoading && isQuizLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(color: AppColors.primaryColor))
           : SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Center(child: SearchField()),
-            ),
-            const SizedBox(height: 16.0),
-            const Text(
-              'Categories',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16.0),
-            SizedBox(
-
-              height: 120,
-              child: categories.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'No categories available.',
-                        style: TextStyle(
-                            fontSize: 16.0, fontStyle: FontStyle.italic),
-                      ),
-                    )
-                  : ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: categories.length,
-                itemBuilder: (context, index) {
-                  final category = categories[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: CategoryCard(
-                      title: category.title,
-                      imgUrl: category.imgUrl,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SearchResultScreen(
-                              searchTerm: category.id,
-                              isCategory: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Center(child: SearchField()),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Text(
+                    'Categories',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  SizedBox(
+                    height: 120,
+                    child: categories.isEmpty
+                        ? Center(
+                            child: Text(
+                              'No categories available.',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    fontStyle: FontStyle.italic,
+                                    color: AppColors.textSecondary,
+                                  ),
                             ),
+                          )
+                        : ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: categories.length,
+                            itemBuilder: (context, index) {
+                              final category = categories[index];
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: CategoryCard(
+                                  title: category.title,
+                                  imgUrl: category.imgUrl,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            SearchResultScreen(
+                                          searchTerm: category.id,
+                                          isCategory: true,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  );
-                },
+                  ),
+                  const SizedBox(height: 16.0),
+                  Text(
+                    'Quizzes',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  SizedBox(
+                    height: 300,
+                    child: quizzes.isEmpty
+                        ? Center(
+                            child: Text(
+                              'No quiz available.',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    fontStyle: FontStyle.italic,
+                                    color: AppColors.textSecondary,
+                                  ),
+                            ),
+                          )
+                        : ListView.builder(
+                            itemCount: quizzes.length,
+                            itemBuilder: (context, index) {
+                              final quiz = quizzes[index];
+                              return Padding(
+                                  padding:
+                                      const EdgeInsets.only(bottom: 8, top: 8),
+                                  child: QuizCard(
+                                    title: quiz.title,
+                                    img_url: quiz.img_url,
+                                    question_quantity: quiz.questionCount,
+                                    isComplete: quiz.isCompleted,
+                                    id: quiz.id,
+                                  ));
+                            },
+                          ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 16.0),
-            const Text(
-              'Quizzes',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16.0),
-            SizedBox(
-              height: 300,
-              child: quizzes.isEmpty
-                  ? const Center(
-                child: Text(
-                  'No quiz available.',
-                  style: TextStyle(
-                      fontSize: 16.0, fontStyle: FontStyle.italic),
-                ),
-              )
-                  : ListView.builder(
-                itemCount: quizzes.length,
-                itemBuilder: (context, index) {
-                  final quiz = quizzes[index];
-                  return Padding(
-                      padding: const EdgeInsets.only(bottom: 8, top: 8),
-                      child: QuizCard(
-                        title: quiz.title,
-                        img_url: quiz.img_url,
-                        question_quantity: quiz.questionCount,
-                        isComplete: quiz.isCompleted,
-                        id: quiz.id,
-                      )
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

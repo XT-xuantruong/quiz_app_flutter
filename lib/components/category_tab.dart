@@ -101,7 +101,7 @@ class _CategoryTabState extends State<CategoryTab> {
               ),
             ],
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           Expanded(
             child: isGridView ?
             GridView.builder(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:uuid/uuid.dart';
 import '../models/question_model.dart';
 import '../models/answer_model.dart';
 import '../models/quiz_model.dart';
@@ -33,7 +32,6 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
   final AnswersService _answersService = AnswersService();
 
   late TextEditingController _questionTextController;
-  late DocumentReference _selectedQuizRef;
   List<QuizModel> _quizzes = [];
   QuizModel? _currentQuiz;
 
@@ -60,11 +58,7 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
 
     // Set initial quiz reference
     if (widget.question != null) {
-      _selectedQuizRef = widget.question!.quiz_id;
     } else if (widget.initialQuiz != null) {
-      _selectedQuizRef = FirebaseFirestore.instance
-          .collection('quizzes')
-          .doc(widget.initialQuiz!.id);
     }
 
     _loadQuizzes();

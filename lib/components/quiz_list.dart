@@ -19,7 +19,7 @@ class QuizListComponent extends StatelessWidget {
       itemCount: quizzes.length,
       itemBuilder: (context, index) {
         return Card(
-          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: ListTile(
             leading: quizzes[index].img_url.isNotEmpty
                 ? ClipRRect(
@@ -31,18 +31,18 @@ class QuizListComponent extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             )
-                : SizedBox(width: 50, height: 50),
+                : const SizedBox(width: 50, height: 50),
             title: Text(quizzes[index].title),
             subtitle: Text(quizzes[index].description),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: Icon(Icons.edit, color: Colors.blue),
+                  icon: const Icon(Icons.edit, color: Colors.blue),
                   onPressed: () => onEditQuiz(quizzes[index]),
                 ),
                 IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
+                  icon: const Icon(Icons.delete, color: Colors.red),
                   onPressed: () => onDeleteQuiz(quizzes[index]),
                 ),
               ],

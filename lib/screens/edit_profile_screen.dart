@@ -1,10 +1,8 @@
 import 'dart:io';
 
 import 'package:cloudinary_public/cloudinary_public.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:quiz_app/models/user_model.dart';
 import 'package:quiz_app/services/user_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

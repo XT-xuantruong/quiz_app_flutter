@@ -1,5 +1,4 @@
 import 'package:uuid/uuid.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Category {
   final String id;

@@ -99,7 +99,6 @@ class _CreateEditCategoryScreenState extends State<CreateEditCategoryScreen> {
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       try {
-        String? imageUrl = await _uploadImageToCloudinary();
 
         CategoryModel.Category newCategory = CategoryModel.Category(
           id: widget.category?.id ?? CategoryModel.Category.generateId(),

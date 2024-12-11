@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class CategoryCard extends StatelessWidget {
   final String title;
   final String imgUrl;
@@ -25,8 +26,8 @@ class CategoryCard extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          SizedBox(height: 8),
-          Text(title, style: TextStyle(fontSize: 16)),
+          const SizedBox(height: 8),
+          Text(title, style: Theme.of(context).textTheme.bodyLarge,),
         ],
       ),
     );

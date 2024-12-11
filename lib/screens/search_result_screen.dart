@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/models/category_model.dart';
 import 'package:quiz_app/models/quiz_model.dart';
-import 'package:quiz_app/screens/quiz_screen.dart';
 import 'package:quiz_app/services/category_service.dart';
 import '../components/quiz_card.dart';
 import '../services/quiz_service.dart';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/models/ranking_model.dart';
 import 'package:quiz_app/services/ranking_service.dart';
+import 'package:quiz_app/themes/app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../components/category_tab.dart';
 import '../components/home_tab.dart';
@@ -81,21 +82,47 @@ class _homeScreenState extends State<HomeScreen> {
         children: _tabs,
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor:  AppColors.cardColor,
         currentIndex: _currentIndex,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: AppColors.primaryColor,
+        unselectedItemColor: AppColors.textSecondary,
+        selectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 12,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.normal,
+          fontSize: 12,
+        ),
         showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
+        elevation: 8,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
           });
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.category), label: 'Category'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.leaderboard), label: 'Ranking'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.category_outlined),
+            activeIcon: Icon(Icons.category),
+            label: 'Category',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.leaderboard_outlined),
+            activeIcon: Icon(Icons.leaderboard),
+            label: 'Ranking',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: 'Profile',
+          ),
 
         ],
       ),
@@ -106,7 +133,7 @@ class _homeScreenState extends State<HomeScreen> {
     switch (_currentIndex) {
       case 0:
         return AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.backgroundColor,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -125,9 +152,7 @@ class _homeScreenState extends State<HomeScreen> {
                   const SizedBox(width: 8.0),
                   Text(
                     userName,
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],
               ),
@@ -135,26 +160,31 @@ class _homeScreenState extends State<HomeScreen> {
                 width: 80,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: Colors.lightBlue,
+                  color: AppColors.secondaryColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Center(
                   child: Text(
                     _rankingModel?.total_score.toString() ?? "0",
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
               ),
             ],
           ),
         );
-      case 1:
-        return AppBar(title: const Center(child: Text('Quiz App')));
       case 2:
-        return AppBar(title: const Center(child: Text('Leaderboard')));
-      case 3:
-        return AppBar(title: const Center(child: Text('Quiz App')));
+        return AppBar(
+          backgroundColor: AppColors.backgroundColor,
+            title: const Center(child: Text(
+                'Leaderboard', style: TextStyle(color: Colors.white),
+            ))
+        );
       default:
-        return AppBar(title: const Center(child: Text('Quiz App')));
+        return AppBar(
+          backgroundColor: AppColors.backgroundColor,
+            title: const Center(child: Text('Quiz App'))
+        );
     }
   }
 }

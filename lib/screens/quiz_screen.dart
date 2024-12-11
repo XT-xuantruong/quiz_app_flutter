@@ -9,6 +9,7 @@ import '../models/quiz_result_model.dart';
 import '../models/ranking_model.dart';
 import '../services/quiz_result_service.dart';
 import '../services/quiz_service.dart';
+import '../themes/app_colors.dart';
 
 class QuizScreen extends StatefulWidget {
   final String id;
@@ -282,21 +283,39 @@ class _QuizScreenState extends State<QuizScreen> {
 
               const Spacer(),
 
-              ElevatedButton(
-                onPressed: (selectedAnswer != null || isTimeUp) ? nextQuestion : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1D6156),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppColors.gradientStart, AppColors.gradientEnd],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
                   ),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primaryColor.withOpacity(0.3),
+                      blurRadius: 8,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
                 ),
-                child: const Text(
-                  'Next',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                child: ElevatedButton(
+                  onPressed: (selectedAnswer != null || isTimeUp) ? nextQuestion : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text(
+                    'Next',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

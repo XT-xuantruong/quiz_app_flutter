@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/themes/app_colors.dart';
 
 class QuizOptions extends StatelessWidget {
   final List<String> options;
@@ -36,9 +37,9 @@ class QuizOptions extends StatelessWidget {
               decoration: BoxDecoration(
                 color: shouldShowResult
                     ? (isCorrect
-                    ? Colors.green.withOpacity(0.9)
-                    : (isSelected ? Colors.red.withOpacity(0.9) : Colors.white))
-                    : (isSelected ? Colors.blue.withOpacity(0.1) : Colors.white),
+                    ? AppColors.correctAnswer
+                    : (isSelected ? AppColors.wrongAnswer : AppColors.neutralAnswer))
+                    : (isSelected ? Colors.blue.withOpacity(0.1) : AppColors.neutralAnswer),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                   color: shouldShowResult

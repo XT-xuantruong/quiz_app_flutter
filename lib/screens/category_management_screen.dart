@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:cloudinary_public/cloudinary_public.dart';
-import 'dart:io';
 
 import '../models/category_model.dart';
 import '../services/category_service.dart';

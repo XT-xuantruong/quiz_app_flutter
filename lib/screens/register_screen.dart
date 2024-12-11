@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:quiz_app/models/ranking_model.dart';
 import 'package:quiz_app/services/ranking_service.dart';
-import '../services/user_service.dart';
-import '../models/user_model.dart';
 import 'login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -17,7 +15,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final UserService _userService = UserService();
 
   // Function to hash password using SHA-256
   String _hashPassword(String password) {
@@ -31,7 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _emailController.text.isEmpty ||
         _passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
             content: Text(
                 style: TextStyle(color: Colors.red),
                 'Please enter full information')),
@@ -63,7 +60,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       await RankingService().addRanking(newRanking);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
             content: Text(
                 style: TextStyle(color: Colors.green),
                 'Register successfully')),
@@ -71,13 +68,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
           (route) => false);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text(
-                style: TextStyle(color: Colors.red),
+                style: const TextStyle(color: Colors.red),
                 'Register failed: ${e.toString()}')),
       );
     }
@@ -89,7 +86,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/background.jpg'),
             fit: BoxFit.cover,
@@ -97,18 +94,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         child: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32.0),
+            padding: const EdgeInsets.symmetric(horizontal: 32.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   width: 120,
                   height: 120,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.white,
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       'QUIZ',
                       style: TextStyle(
@@ -119,72 +116,72 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 32.0),
+                const SizedBox(height: 32.0),
                 TextField(
                   controller: _nameController,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     hintText: 'Full Name',
-                    hintStyle: TextStyle(color: Colors.blueGrey),
+                    hintStyle: const TextStyle(color: Colors.blueGrey),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide(color: Colors.white54),
+                      borderSide: const BorderSide(color: Colors.white54),
                     ),
                     filled: true,
                     fillColor: Colors.transparent,
                     contentPadding:
-                        EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                        const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
                   ),
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 TextField(
                   controller: _emailController,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     hintText: 'Email',
-                    hintStyle: TextStyle(color: Colors.blueGrey),
+                    hintStyle: const TextStyle(color: Colors.blueGrey),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide(color: Colors.white54),
+                      borderSide: const BorderSide(color: Colors.white54),
                     ),
                     filled: true,
                     fillColor: Colors.transparent,
                     contentPadding:
-                        EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                        const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
                   ),
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
-                  style: TextStyle(color: Colors.blueGrey),
+                  style: const TextStyle(color: Colors.blueGrey),
                   decoration: InputDecoration(
                     hintText: 'Password',
-                    hintStyle: TextStyle(color: Colors.blueGrey),
+                    hintStyle: const TextStyle(color: Colors.blueGrey),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide(color: Colors.white54),
+                      borderSide: const BorderSide(color: Colors.white54),
                     ),
                     filled: true,
                     fillColor: Colors.transparent,
                     contentPadding:
-                        EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                        const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
                   ),
                 ),
-                SizedBox(height: 24.0),
+                const SizedBox(height: 24.0),
                 SizedBox(
                   width: screenWidth,
                   child: ElevatedButton(
                     onPressed: _registerUser,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amber[400],
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                           vertical: 16.0, horizontal: 32.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Register',
                       style: TextStyle(
                         fontSize: 16.0,
@@ -194,7 +191,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 // Container(
                 //   width: screenWidth,
                 //   decoration: BoxDecoration(

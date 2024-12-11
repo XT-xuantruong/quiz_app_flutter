@@ -44,7 +44,7 @@ class _UserManagementScreenState extends State {
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(style: TextStyle(color: Colors.red), 'Error loading user')),
+        const SnackBar(content: Text(style: TextStyle(color: Colors.red), 'Error loading user')),
       );
     }
   }
@@ -56,15 +56,15 @@ class _UserManagementScreenState extends State {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Access Denied'),
-            content: Text('You do not have permission to access the admin page.'),
+            title: const Text('Access Denied'),
+            content: const Text('You do not have permission to access the admin page.'),
             actions: [
               TextButton(
-                child: Text('Back'),
+                child: const Text('Back'),
                 onPressed: () {
                   Navigator.of(context).pop(); // Close dialog
                   Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => LoginScreen())
+                      MaterialPageRoute(builder: (context) => const LoginScreen())
                   );
                 },
               ),
@@ -87,11 +87,11 @@ class _UserManagementScreenState extends State {
         _users.remove(user);
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(style: TextStyle(color: Colors.red), 'User deleted')),
+        const SnackBar(content: Text(style: TextStyle(color: Colors.red), 'User deleted')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(style: TextStyle(color: Colors.red), 'Error deleting user')),
+        const SnackBar(content: Text(style: TextStyle(color: Colors.red), 'Error deleting user')),
       );
     }
   }
@@ -101,8 +101,8 @@ class _UserManagementScreenState extends State {
     // Recheck admin permissions
     if (!_isAdmin) {
       return Scaffold(
-        appBar: AppBar(title: Text('Access Denied')),
-        body: Center(
+        appBar: AppBar(title: const Text('Access Denied')),
+        body: const Center(
           child: Text( style: TextStyle(color: Colors.red), 'You do not have permission to access this page.'),
         ),
       );
@@ -110,7 +110,7 @@ class _UserManagementScreenState extends State {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'User Management',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -121,7 +121,7 @@ class _UserManagementScreenState extends State {
           backgroundColor: Colors.deepPurple,
           centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -129,7 +129,7 @@ class _UserManagementScreenState extends State {
 
         ),
         body: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/manage.jpg'),
               fit: BoxFit.cover,

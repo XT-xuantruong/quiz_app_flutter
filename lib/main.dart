@@ -5,6 +5,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 
 import 'package:quiz_app/screens/login_screen.dart';
+import 'package:quiz_app/themes/app_colors.dart';
+import 'package:quiz_app/themes/app_theme.dart';
 
 import 'firebase_options.dart';
 
@@ -93,13 +95,40 @@ class ErrorApp extends StatelessWidget {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Quiz App',
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      theme: ThemeData(
+        primaryColor: AppColors.primaryColor,
+        scaffoldBackgroundColor: AppColors.backgroundColor,
+        fontFamily: AppTheme.fontFamily,
+        textTheme: AppTheme.textTheme,
+
+        // Tùy chỉnh input decoration
+        inputDecorationTheme: InputDecorationTheme(
+          labelStyle: AppTheme.inputTextStyle.copyWith(
+            color: AppColors.textSecondary,
+          ),
+          hintStyle: AppTheme.inputTextStyle.copyWith(
+            color: AppColors.textSecondary.withOpacity(0.7),
+          ),
+        ),
+
+        // Tùy chỉnh button
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            textStyle: AppTheme.buttonTextStyle,
+            backgroundColor: AppColors.primaryColor,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+      ),
+      home: const LoginScreen(),
     );
   }
 }

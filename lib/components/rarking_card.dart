@@ -15,7 +15,7 @@ class RankingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
           color: Colors.white,
@@ -25,7 +25,7 @@ class RankingCard extends StatelessWidget {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 2,
               blurRadius: 10,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ]),
       child: Row(
@@ -34,7 +34,7 @@ class RankingCard extends StatelessWidget {
           Row(
             children: [
               Text('$rank'),
-              SizedBox(
+              const SizedBox(
                 width: 8,
               ),
               Text('$user_name'),

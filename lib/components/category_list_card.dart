@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/themes/app_theme.dart';
 
 class CategoryListCard extends StatelessWidget {
   final String title;
@@ -42,7 +43,10 @@ class CategoryListCard extends StatelessWidget {
                 Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      Text(
+                          title,
+                          style: AppTheme.textTheme.titleMedium
+                      ),
                       // const SizedBox(height: 2),
                       // Text("${widget.question_quantity.toString()} questions", style: TextStyle(fontSize: 18)),
                     ]

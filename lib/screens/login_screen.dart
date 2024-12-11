@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
+import 'package:quiz_app/themes/app_theme.dart';
 import 'dart:convert';
 import '../services/user_service.dart';
 import '../models/user_model.dart';
@@ -92,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/background.jpg'),
             fit: BoxFit.cover,
@@ -125,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 32.0),
                 TextField(
                   controller: _emailController,
-                  style: TextStyle(color: Colors.white),
+                  style: AppTheme.inputTextStyle,
                   decoration: InputDecoration(
                     hintText: 'Email',
                     hintStyle: TextStyle(color: Colors.blueGrey),
@@ -142,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
-                  style: TextStyle(color: Colors.blueGrey),
+                  style: AppTheme.inputTextStyle,
                   decoration: InputDecoration(
                     hintText: 'Password',
                     hintStyle: TextStyle(color: Colors.blueGrey),

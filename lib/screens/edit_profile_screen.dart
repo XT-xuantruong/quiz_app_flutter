@@ -98,7 +98,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Lỗi tải ảnh: $e'),
+          content: Text('Error upload images: $e'),
             backgroundColor: AppColors.wrongAnswer
         ),
       );
@@ -173,7 +173,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ElevatedButton.icon(
               onPressed: _pickImage,
               icon: Icon(Icons.image),
-              label: Text('Chọn Ảnh'),
+              label: Text('Choose image'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,
               ),

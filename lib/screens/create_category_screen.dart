@@ -61,11 +61,9 @@ class _CreateEditCategoryScreenState extends State<CreateEditCategoryScreen> {
     }
   }
 
-
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       try {
-
         CategoryModel.Category newCategory = CategoryModel.Category(
           id: widget.category?.id ?? CategoryModel.Category.generateId(),
           title: _titleController.text,
@@ -75,12 +73,12 @@ class _CreateEditCategoryScreenState extends State<CreateEditCategoryScreen> {
         if (widget.category == null) {
           await _categoryService.addCategory(newCategory);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Tạo danh mục thành công'), backgroundColor: AppColors.correctAnswer),
+            SnackBar(content: Text('Category Created Successfully'), backgroundColor: AppColors.correctAnswer),
           );
         } else {
           await _categoryService.updateCategory(newCategory);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Cập nhật danh mục thành công'), backgroundColor: AppColors.correctAnswer,),
+            SnackBar(content: Text('Category Updated Successfully'), backgroundColor: AppColors.correctAnswer,),
           );
         }
 
@@ -96,7 +94,7 @@ class _CreateEditCategoryScreenState extends State<CreateEditCategoryScreen> {
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Lỗi: ${e.toString()}'),
+            content: Text('Error: ${e.toString()}'),
             backgroundColor: AppColors.wrongAnswer,
           ),
         );
@@ -109,7 +107,7 @@ class _CreateEditCategoryScreenState extends State<CreateEditCategoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.category == null ? 'Tạo Danh Mục Mới' : 'Chỉnh Sửa Danh Mục',
+          widget.category == null ? 'Create New Category' : 'Edit Category',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.deepPurple,
@@ -123,12 +121,12 @@ class _CreateEditCategoryScreenState extends State<CreateEditCategoryScreen> {
               TextFormField(
                 controller: _titleController,
                 decoration: InputDecoration(
-                  labelText: 'Tên Danh Mục',
+                  labelText: 'Category Name',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập tên danh mục';
+                    return 'Please enter category name';
                   }
                   return null;
                 },
@@ -141,7 +139,7 @@ class _CreateEditCategoryScreenState extends State<CreateEditCategoryScreen> {
                   color: Colors.white,
                 ),
                 label: Text(
-                  'Chọn Ảnh',
+                  'Choose Image',
                   style: TextStyle(color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
@@ -181,7 +179,7 @@ class _CreateEditCategoryScreenState extends State<CreateEditCategoryScreen> {
               ElevatedButton(
                 onPressed: _submitForm,
                 child: Text(
-                  widget.category == null ? 'Tạo Danh Mục' : 'Cập Nhật',
+                  widget.category == null ? 'Create Category' : 'Update',
                   style: TextStyle(color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(

@@ -46,9 +46,9 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            'Lỗi tải danh sách quiz: : $e',
-          ),
+            content: Text(
+              'Error loading quiz list: $e',
+            ),
             backgroundColor: AppColors.wrongAnswer
         ),
       );
@@ -69,18 +69,18 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            'Đã xóa quiz',
-          ),
+            content: Text(
+              'Quiz deleted',
+            ),
             backgroundColor: AppColors.wrongAnswer
         ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            'Lỗi xóa quiz',
-          ),
+            content: Text(
+              'Error deleting quiz',
+            ),
             backgroundColor: AppColors.wrongAnswer
         ),
       );
@@ -99,10 +99,10 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
   Widget build(BuildContext context) {
     if (!_isAdmin) {
       return Scaffold(
-        appBar: AppBar(title: Text('Từ chối truy cập')),
+        appBar: AppBar(title: Text('Access Denied')),
         body: Center(
           child: Text(
-            'Bạn không có quyền truy cập trang này.',
+            'You do not have permission to access this page.',
             style: TextStyle(color: Colors.red),
           ),
         ),
@@ -112,7 +112,7 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Quản Lý Quiz',
+          'Quiz Management',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,

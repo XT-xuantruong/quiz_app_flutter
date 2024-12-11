@@ -52,13 +52,12 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
     try {
       _categories = await CategoryService().getCategories();
 
-
       setState(() {});
     } catch (e) {
-      // Xử lý lỗi khi lấy danh sách danh mục
+      // Handle error when loading category list
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Lỗi khi tải danh mục: $e'),
+          content: Text('Error loading categories: $e'),
           backgroundColor: AppColors.correctAnswer,
         ),
       );
@@ -117,8 +116,9 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Lỗi tải ảnh: $e'),
-            backgroundColor: AppColors.wrongAnswer       ),
+          content: Text('Image upload error: $e'),
+          backgroundColor: AppColors.wrongAnswer,
+        ),
       );
       return null;
     }
@@ -145,12 +145,12 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
         if (widget.quiz == null) {
           await _quizService.addQuiz(quiz);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Tạo quiz thành công'), backgroundColor: AppColors.correctAnswer),
+            SnackBar(content: Text('Quiz created successfully'), backgroundColor: AppColors.correctAnswer),
           );
         } else {
           await _quizService.updateQuiz(quiz);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Cập nhật quiz thành công'), backgroundColor: AppColors.correctAnswer),
+            SnackBar(content: Text('Quiz updated successfully'), backgroundColor: AppColors.correctAnswer),
           );
         }
 
@@ -158,7 +158,7 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Lỗi: ${e.toString()}'),
+            content: Text('Error: ${e.toString()}'),
             backgroundColor: Colors.red,
           ),
         );
@@ -166,13 +166,12 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.quiz == null ? 'Tạo Quiz Mới' : 'Chỉnh Sửa Quiz',
+          widget.quiz == null ? 'Create New Quiz' : 'Edit Quiz',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.deepPurple,
@@ -183,16 +182,15 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
           key: _formKey,
           child: ListView(
             children: [
-
               TextFormField(
                 controller: _titleController,
                 decoration: InputDecoration(
-                  labelText: 'Tiêu đề Quiz',
+                  labelText: 'Quiz Title',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập tiêu đề';
+                    return 'Please enter a title';
                   }
                   return null;
                 },
@@ -201,12 +199,12 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
               TextFormField(
                 controller: _descriptionController,
                 decoration: InputDecoration(
-                  labelText: 'Mô tả',
+                  labelText: 'Description',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập mô tả';
+                    return 'Please enter a description';
                   }
                   return null;
                 },
@@ -214,7 +212,7 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
               SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(
-                  labelText: 'Danh mục',
+                  labelText: 'Category',
                   border: OutlineInputBorder(),
                 ),
                 value: _categories.isNotEmpty && _categoryController.text.isNotEmpty
@@ -230,7 +228,7 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
                 }).toList(),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Vui lòng chọn danh mục';
+                    return 'Please select a category';
                   }
                   return null;
                 },
@@ -239,18 +237,17 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
                     _categoryController.text = value!;  // Store category id as text for form submission
                   });
                 },
-              )
-,
+              ),
               SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: _pickImage,
                 icon: Icon(Icons.image, color: Colors.white,),
-                label: Text(style: TextStyle(color: Colors.white), 'Chọn Ảnh'),
+                label: Text(style: TextStyle(color: Colors.white), 'Choose Image'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
                 ),
               ),
-              // Hiển thị ảnh đã chọn hoặc ảnh hiện tại
+              // Display selected or current image
               if (_imageFile != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -278,14 +275,17 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
                     fit: BoxFit.cover,
                   ),
                 ),
-              // Nếu đang upload thì hiển thị loading
+              // Show loading if uploading
               if (_isUploading)
                 Center(child: CircularProgressIndicator()),
 
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: Text(style: TextStyle(color: Colors.white),widget.quiz == null ? 'Tạo Quiz' : 'Cập Nhật'),
+                child: Text(
+                  style: TextStyle(color: Colors.white),
+                  widget.quiz == null ? 'Create Quiz' : 'Update',
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
                   minimumSize: Size(double.infinity, 50),

@@ -53,7 +53,6 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
 
     setState(() {
       _isAdmin = isAdmin ?? false;
-
     });
 
     if (_isAdmin) {
@@ -72,7 +71,7 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
         _quizzes = quizzes;
       });
     } catch (e) {
-      _showErrorSnackBar('Lỗi tải danh sách quiz: $e');
+      _showErrorSnackBar('Error loading quiz list: $e');
     }
   }
 
@@ -105,7 +104,7 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
       setState(() {
         _isLoading = false;
       });
-      _showErrorSnackBar('Lỗi tải danh sách câu hỏi: $e');
+      _showErrorSnackBar('Error loading question list: $e');
     }
   }
 
@@ -135,9 +134,9 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
       setState(() {
         _questions.remove(question);
       });
-      _showSuccessSnackBar('Đã xóa câu hỏi');
+      _showSuccessSnackBar('Question deleted');
     } catch (e) {
-      _showErrorSnackBar('Lỗi xóa câu hỏi');
+      _showErrorSnackBar('Error deleting question');
     }
   }
 
@@ -147,9 +146,9 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
       setState(() {
         _questionAnswers[question.id]?.remove(answer);
       });
-      _showSuccessSnackBar('Đã xóa câu trả lời');
+      _showSuccessSnackBar('Answer deleted');
     } catch (e) {
-      _showErrorSnackBar('Lỗi xóa câu trả lời');
+      _showErrorSnackBar('Error deleting answer');
     }
   }
 
@@ -157,11 +156,11 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Xác nhận xóa'),
+        title: const Text('Confirm Deletion'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Hủy'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
@@ -172,7 +171,7 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
               }
               Navigator.of(context).pop();
             },
-            child: const Text('Xóa', style: TextStyle(color: Colors.red)),
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -182,9 +181,9 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          message,
-        ),
+          content: Text(
+            message,
+          ),
           backgroundColor: AppColors.wrongAnswer
       ),
     );
@@ -193,9 +192,9 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
   void _showSuccessSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          message,
-        ),
+          content: Text(
+            message,
+          ),
           backgroundColor: AppColors.correctAnswer
       ),
     );
@@ -205,10 +204,10 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
   Widget build(BuildContext context) {
     if (!_isAdmin) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Từ chối truy cập')),
+        appBar: AppBar(title: const Text('Access Denied')),
         body: const Center(
           child: Text(
-            'Bạn không có quyền truy cập trang này.',
+            'You do not have permission to access this page.',
             style: TextStyle(color: Colors.red),
           ),
         ),
@@ -219,8 +218,8 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
       appBar: AppBar(
         title: Text(
           _isQuizView
-              ? 'Quản Lý Question & Answer'
-              : 'Câu Hỏi của Quiz: ${_selectedQuiz?.title ?? ''}',
+              ? 'Q&A Management'
+              : 'Questions of Quiz: ${_selectedQuiz?.title ?? ''}',
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -276,7 +275,7 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: ListTile(
             title: Text("QUIZ: " + quiz.title),
-            subtitle: Text('Số câu hỏi: ${quiz.questionCount}'),
+            subtitle: Text('Number of questions: ${quiz.questionCount}'),
             onTap: () => _loadQuestionsByQuiz(quiz),
           ),
         );
@@ -288,7 +287,7 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
     if (_questions.isEmpty) {
       return Center(
         child: Text(
-          'Không có câu hỏi nào trong quiz này',
+          'No questions in this quiz',
           style: TextStyle(fontSize: 18),
         ),
       );
@@ -308,8 +307,8 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
             ),
             subtitle: Text(
               answers.isNotEmpty
-                  ? '${answers.length} câu trả lời'
-                  : 'Chưa có câu trả lời',
+                  ? '${answers.length} answers'
+                  : 'No answers yet',
               style: const TextStyle(color: Colors.grey),
             ),
             trailing: Row(
@@ -337,7 +336,7 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
                   children: [
                     if (answer.is_correct)
                       const Text(
-                        'Đây là câu đúng',
+                        'This is the correct answer',
                         style: TextStyle(
                           color: Colors.green,
                           fontWeight: FontWeight.bold,

@@ -12,7 +12,7 @@ class CreateEditQuestionScreen extends StatefulWidget {
   final QuestionModel? question;
   final QuizModel? initialQuiz;
   final AnswerModel? answer;
-  final QuestionModel? initialQuestion; // Add this line
+  final QuestionModel? initialQuestion;
 
   const CreateEditQuestionScreen({
     Key? key,
@@ -63,8 +63,6 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
     }
 
     _loadQuizzes();
-
-
   }
 
   void _loadQuizzes() async {
@@ -74,14 +72,12 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
         _quizzes = quizzes;
       });
     } catch (e) {
-      _showErrorSnackBar('Lỗi tải danh sách quiz: $e', );
+      _showErrorSnackBar('Error loading quiz list: $e');
     }
   }
 
-
   void _loadExistingAnswers() async {
     try {
-
       final answers = await _answersService.getAnswersByQuestion(
           FirebaseFirestore.instance.collection('questions').doc(widget.question!.id)
       );
@@ -102,9 +98,10 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
 
       setState(() {});
     } catch (e) {
-      _showErrorSnackBar('Lỗi tải câu trả lời: $e');
+      _showErrorSnackBar('Error loading answers: $e');
     }
   }
+
   void _addOptionField({
     String optionText = '',
     bool isCorrect = false,
@@ -134,19 +131,19 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
 
         // Validate at least one correct answer
         if (!_isCorrectOptions.contains(true)) {
-          _showErrorSnackBar('Phải có ít nhất một câu trả lời đúng');
+          _showErrorSnackBar('At least one correct answer is required');
           return;
         }
 
         // Validate option texts
         for (var controller in _optionControllers) {
           if (controller.text.trim().isEmpty) {
-            _showErrorSnackBar('Không được để trống câu trả lời');
+            _showErrorSnackBar('Answer cannot be empty');
             return;
           }
         }
 
-        // Tạo hoặc cập nhật câu hỏi
+        // Create or update question
         final question = QuestionModel(
           id: widget.question?.id,
           quiz_id: FirebaseFirestore.instance
@@ -160,7 +157,7 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
         final _db = FirebaseFirestore.instance;
 
         if (widget.question == null) {
-          // Thêm mới
+          // Add new
           await _questionsService.addQuestion(question);
           questionRef = (await _db.collection('questions')
               .where('quiz_id', isEqualTo: question.quiz_id)
@@ -170,7 +167,7 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
               .first
               .reference;
         } else {
-          // Cập nhật
+          // Update
           await _questionsService.updateQuestion(question);
           questionRef = _db.collection('questions').doc(widget.question!.id);
         }
@@ -199,13 +196,13 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
 
         _showSuccessSnackBar(
             widget.question == null
-                ? 'Thêm câu hỏi thành công'
-                : 'Cập nhật câu hỏi thành công'
+                ? 'Question added successfully'
+                : 'Question updated successfully'
         );
 
         Navigator.of(context).pop(true);
       } catch (e) {
-        _showErrorSnackBar('Lỗi lưu câu hỏi: $e');
+        _showErrorSnackBar('Error saving question: $e');
       }
     }
   }
@@ -216,8 +213,8 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
       appBar: AppBar(
         title: Text(
           widget.question == null
-              ? 'Tạo Câu Hỏi Mới'
-              : 'Chỉnh Sửa Câu Hỏi',
+              ? 'Create New Question'
+              : 'Edit Question',
           style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.deepPurple,
@@ -231,7 +228,7 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
               // Quiz Dropdown
               DropdownButtonFormField<QuizModel>(
                 decoration: InputDecoration(
-                  labelText: 'Chọn Quiz',
+                  labelText: 'Select Quiz',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -250,7 +247,7 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    return 'Vui lòng chọn quiz';
+                    return 'Please select a quiz';
                   }
                   return null;
                 },
@@ -261,7 +258,7 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
               TextFormField(
                 controller: _questionTextController,
                 decoration: InputDecoration(
-                  labelText: 'Nội Dung Câu Hỏi',
+                  labelText: 'Question Content',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -269,7 +266,7 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
                 maxLines: 3,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Vui lòng nhập nội dung câu hỏi';
+                    return 'Please enter question content';
                   }
                   return null;
                 },
@@ -278,7 +275,7 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
 
               // Options Section
               Text(
-                'Câu Trả Lời',
+                'Answers',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
@@ -293,7 +290,7 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
                         child: TextFormField(
                           controller: _optionControllers[index],
                           decoration: InputDecoration(
-                            labelText: 'Câu Trả Lời ${index + 1}',
+                            labelText: 'Answer ${index + 1}',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -323,7 +320,7 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
               ElevatedButton.icon(
                 onPressed: () => _addOptionField(),
                 icon: const Icon(Icons.add),
-                label: const Text('Thêm Câu Trả Lời'),
+                label: const Text('Add Answer'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                 ),
@@ -342,8 +339,8 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
                 ),
                 child: Text(
                   widget.question == null
-                      ? 'Tạo Câu Hỏi'
-                      : 'Cập Nhật Câu Hỏi',
+                      ? 'Create Question'
+                      : 'Update Question',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -351,6 +348,7 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
                 ),
               ),
             ],
+
           ),
         ),
       ),
@@ -360,9 +358,9 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          message,
-        ),
+          content: Text(
+            message,
+          ),
           backgroundColor: AppColors.wrongAnswer
       ),
     );
@@ -371,9 +369,9 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
   void _showSuccessSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          message,
-        ),
+          content: Text(
+            message,
+          ),
           backgroundColor: AppColors.correctAnswer
       ),
     );

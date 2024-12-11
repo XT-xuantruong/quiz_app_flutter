@@ -52,6 +52,7 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
 
     setState(() {
       _isAdmin = isAdmin ?? false;
+
     });
 
     if (_isAdmin) {

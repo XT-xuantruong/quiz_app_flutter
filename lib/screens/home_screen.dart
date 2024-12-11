@@ -74,6 +74,7 @@ class _homeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: _buildAppBar(),
       body: IndexedStack(
         index: _currentIndex,
@@ -104,6 +105,7 @@ class _homeScreenState extends State<HomeScreen> {
     switch (_currentIndex) {
       case 0:
         return AppBar(
+          backgroundColor: Colors.white,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -145,13 +147,13 @@ class _homeScreenState extends State<HomeScreen> {
           ),
         );
       case 1:
-        return AppBar(title: const Text('Quiz App'));
+        return AppBar(title: const Center(child: Text('Quiz App')));
       case 2:
-        return AppBar(title: const Text('Leaderboard'));
+        return AppBar(title: const Center(child: Text('Leaderboard')));
       case 3:
-        return AppBar(title: const Text('Quiz App'));
+        return AppBar(title: const Center(child: Text('Quiz App')));
       default:
-        return AppBar(title: const Text('Quiz App'));
+        return AppBar(title: const Center(child: Text('Quiz App')));
     }
   }
 }

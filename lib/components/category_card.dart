@@ -17,15 +17,12 @@ class CategoryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: const Color(0xABABC2E3),
-            ),
+          ClipOval(
             child: Image.network(
               imgUrl,
+              width: 70,
+              height: 70,
+              fit: BoxFit.cover,
             ),
           ),
           SizedBox(height: 8),

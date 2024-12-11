@@ -111,15 +111,16 @@ class _HomeTabState extends State<HomeTab> {
             ),
             const SizedBox(height: 16.0),
             SizedBox(
+
               height: 120,
               child: categories.isEmpty
                   ? const Center(
-                child: Text(
-                  'No categories available.',
-                  style: TextStyle(
-                      fontSize: 16.0, fontStyle: FontStyle.italic),
-                ),
-              )
+                      child: Text(
+                        'No categories available.',
+                        style: TextStyle(
+                            fontSize: 16.0, fontStyle: FontStyle.italic),
+                      ),
+                    )
                   : ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: categories.length,

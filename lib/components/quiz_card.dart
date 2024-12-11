@@ -26,7 +26,7 @@ class _QuizCardState extends State<QuizCard> {
   void _onItemTapped() {
     if (!widget.isComplete) {
       // Chỉ điều hướng đến quiz screen nếu quiz chưa hoàn thành
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => QuizScreen(id: widget.id),
@@ -47,7 +47,7 @@ class _QuizCardState extends State<QuizCard> {
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 2,
-                blurRadius: 10,
+                blurRadius: 5,
                 offset: Offset(0, 4),
               ),
             ]

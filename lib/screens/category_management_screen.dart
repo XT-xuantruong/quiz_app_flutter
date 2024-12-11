@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/category_model.dart';
 import '../services/category_service.dart';
 import 'create_category_screen.dart';
+import 'package:quiz_app/themes/app_colors.dart';
 
 // Category Management Screen
 class CategoryManagementScreen extends StatefulWidget {
@@ -45,8 +46,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.red,
-      ),
+          backgroundColor: AppColors.wrongAnswer      ),
     );
   }
 
@@ -72,7 +72,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Category "${category.title}" deleted successfully'),
-          backgroundColor: Colors.green,
+          backgroundColor: AppColors.wrongAnswer,
         ),
       );
     } catch (e) {
@@ -96,7 +96,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
               Navigator.of(context).pop();
               _deleteCategory(category);
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.wrongAnswer),
             child: const Text('Delete'),
           ),
         ],

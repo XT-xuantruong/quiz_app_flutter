@@ -3,6 +3,7 @@ import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import '../services/user_service.dart';
 import '../models/user_model.dart';
+import '../themes/app_colors.dart';
 import 'register_screen.dart';
 import 'home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,8 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
         const SnackBar(
           content: Text(
             'Please enter email and password',
-            style: TextStyle(color: Colors.red),
           ),
+            backgroundColor: AppColors.wrongAnswer
         ),
       );
       return;
@@ -70,8 +71,8 @@ class _LoginScreenState extends State<LoginScreen> {
         SnackBar(
           content: Text(
             'Login successful',
-            style: TextStyle(color: Colors.green),
           ),
+            backgroundColor: AppColors.correctAnswer
         ),
       );
     } catch (e) {
@@ -79,8 +80,8 @@ class _LoginScreenState extends State<LoginScreen> {
         SnackBar(
           content: Text(
             'Login fail',
-            style: TextStyle(color: Colors.red),
           ),
+            backgroundColor: AppColors.wrongAnswer
         ),
       );
     }

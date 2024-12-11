@@ -13,6 +13,7 @@ import '../models/answer_model.dart';
 
 // Import screens
 import '../services/answer_service.dart';
+import '../themes/app_colors.dart';
 import 'create_edit_question_screen.dart';
 import 'login_screen.dart';
 
@@ -57,8 +58,6 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
 
     if (_isAdmin) {
       _loadData();
-    } else {
-      _showUnauthorizedAccess();
     }
   }
 
@@ -130,22 +129,6 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
     }
   }
 
-  void _navigateToCreateEditAnswer({AnswerModel? answer, QuestionModel? question}) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CreateEditQuestionScreen(
-          answer: answer,
-          initialQuestion: question,
-        ),
-      ),
-    );
-
-    if (result == true && _selectedQuiz != null) {
-      _loadQuestionsByQuiz(_selectedQuiz!);
-    }
-  }
-
   void _deleteQuestion(QuestionModel question) async {
     try {
       await _questionService.deleteQuestion(question.id);
@@ -201,8 +184,8 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
       SnackBar(
         content: Text(
           message,
-          style: const TextStyle(color: Colors.red),
         ),
+          backgroundColor: AppColors.wrongAnswer
       ),
     );
   }
@@ -212,36 +195,10 @@ class _QAManagementScreenState extends State<QAManagementScreen> {
       SnackBar(
         content: Text(
           message,
-          style: const TextStyle(color: Colors.green),
         ),
+          backgroundColor: AppColors.correctAnswer
       ),
     );
-  }
-
-  void _showUnauthorizedAccess() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Từ chối truy cập'),
-            content: const Text('Bạn không có quyền truy cập trang quản trị.'),
-            actions: [
-              TextButton(
-                child: const Text('Quay lại'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  );
-                },
-              ),
-            ],
-          );
-        },
-      );
-    });
   }
 
   @override

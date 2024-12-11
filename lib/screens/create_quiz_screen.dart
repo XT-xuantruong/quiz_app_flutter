@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart'; // For platform check
 import '../models/quiz_model.dart';
 import '../services/category_service.dart';
 import '../services/quiz_service.dart';
+import '../themes/app_colors.dart';
 
 class CreateQuizScreen extends StatefulWidget {
   final QuizModel? quiz;
@@ -58,7 +59,7 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Lỗi khi tải danh mục: $e'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.correctAnswer,
         ),
       );
     }
@@ -117,8 +118,7 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Lỗi tải ảnh: $e'),
-          backgroundColor: Colors.red,
-        ),
+            backgroundColor: AppColors.wrongAnswer       ),
       );
       return null;
     }
@@ -145,12 +145,12 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
         if (widget.quiz == null) {
           await _quizService.addQuiz(quiz);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Tạo quiz thành công')),
+            SnackBar(content: Text('Tạo quiz thành công'), backgroundColor: AppColors.correctAnswer),
           );
         } else {
           await _quizService.updateQuiz(quiz);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Cập nhật quiz thành công')),
+            SnackBar(content: Text('Cập nhật quiz thành công'), backgroundColor: AppColors.correctAnswer),
           );
         }
 

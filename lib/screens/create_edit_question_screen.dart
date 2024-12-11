@@ -6,6 +6,7 @@ import '../models/quiz_model.dart';
 import '../services/answer_service.dart';
 import '../services/question_service.dart';
 import '../services/quiz_service.dart';
+import '../themes/app_colors.dart';
 
 class CreateEditQuestionScreen extends StatefulWidget {
   final QuestionModel? question;
@@ -73,7 +74,7 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
         _quizzes = quizzes;
       });
     } catch (e) {
-      _showErrorSnackBar('Lỗi tải danh sách quiz: $e');
+      _showErrorSnackBar('Lỗi tải danh sách quiz: $e', );
     }
   }
 
@@ -361,8 +362,8 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
       SnackBar(
         content: Text(
           message,
-          style: const TextStyle(color: Colors.red),
         ),
+          backgroundColor: AppColors.wrongAnswer
       ),
     );
   }
@@ -372,8 +373,8 @@ class _CreateEditQuestionScreenState extends State<CreateEditQuestionScreen> {
       SnackBar(
         content: Text(
           message,
-          style: const TextStyle(color: Colors.green),
         ),
+          backgroundColor: AppColors.correctAnswer
       ),
     );
   }

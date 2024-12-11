@@ -7,6 +7,7 @@ import 'package:quiz_app/services/user_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/image_preview.dart';
+import '../themes/app_colors.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final String currentName;
@@ -98,7 +99,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Lỗi tải ảnh: $e'),
-          backgroundColor: Colors.red,
+            backgroundColor: AppColors.wrongAnswer
         ),
       );
       return null;
@@ -127,14 +128,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile updated successfully!')),
+          const SnackBar(content: Text('Profile updated successfully!'), backgroundColor: AppColors.correctAnswer),
         );
         Navigator.pop(context, true); // Return true to indicate success
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error updating profile: $e')),
+          SnackBar(content: Text('Error updating profile: $e'), backgroundColor: AppColors.correctAnswer),
         );
       }
     }

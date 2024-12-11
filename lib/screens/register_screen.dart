@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:quiz_app/models/ranking_model.dart';
 import 'package:quiz_app/services/ranking_service.dart';
+import '../themes/app_colors.dart';
 import 'login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -30,8 +31,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text(
-                style: TextStyle(color: Colors.red),
-                'Please enter full information')),
+                'Please enter full information'),
+            backgroundColor: AppColors.wrongAnswer
+        ),
       );
       return;
     }
@@ -62,8 +64,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text(
-                style: TextStyle(color: Colors.green),
-                'Register successfully')),
+                'Register successfully'),
+          backgroundColor: AppColors.correctAnswer
+        )
       );
 
       Navigator.pushAndRemoveUntil(
@@ -74,8 +77,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text(
-                style: const TextStyle(color: Colors.red),
-                'Register failed: ${e.toString()}')),
+                'Register failed: ${e.toString()}'),
+            backgroundColor: AppColors.wrongAnswer
+        ),
       );
     }
   }

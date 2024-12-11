@@ -8,6 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:quiz_app/models/category_model.dart' as CategoryModel;
 import 'package:quiz_app/services/category_service.dart';
 
+import '../themes/app_colors.dart';
+
 class CreateEditCategoryScreen extends StatefulWidget {
   final CategoryModel.Category? category;
   final Function(CategoryModel.Category)? onCategoryAdded;
@@ -59,42 +61,6 @@ class _CreateEditCategoryScreenState extends State<CreateEditCategoryScreen> {
     }
   }
 
-  Future<String?> _uploadImageToCloudinary() async {
-    if (_imageFile == null && _imageUrl != null) return _imageUrl;
-    if (_imageFile == null) return null;
-
-    setState(() {
-      _isUploading = true;
-    });
-
-    try {
-      final response = await cloudinary.uploadFile(
-        CloudinaryFile.fromFile(
-          _imageFile!.path,
-          folder: 'quiz_uploads',
-          resourceType: CloudinaryResourceType.Image,
-        ),
-      );
-
-      setState(() {
-        _isUploading = false;
-        _imageUrl = response.secureUrl;
-      });
-
-      return response.secureUrl;
-    } catch (e) {
-      setState(() {
-        _isUploading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Lỗi tải ảnh: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return null;
-    }
-  }
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -109,12 +75,12 @@ class _CreateEditCategoryScreenState extends State<CreateEditCategoryScreen> {
         if (widget.category == null) {
           await _categoryService.addCategory(newCategory);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Tạo danh mục thành công')),
+            SnackBar(content: Text('Tạo danh mục thành công'), backgroundColor: AppColors.correctAnswer),
           );
         } else {
           await _categoryService.updateCategory(newCategory);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Cập nhật danh mục thành công')),
+            SnackBar(content: Text('Cập nhật danh mục thành công'), backgroundColor: AppColors.correctAnswer,),
           );
         }
 
@@ -131,7 +97,7 @@ class _CreateEditCategoryScreenState extends State<CreateEditCategoryScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Lỗi: ${e.toString()}'),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColors.wrongAnswer,
           ),
         );
       }

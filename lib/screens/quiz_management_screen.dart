@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../components/quiz_list.dart';
 import '../models/quiz_model.dart';
 import '../services/quiz_service.dart';
+import '../themes/app_colors.dart';
 import 'login_screen.dart';
 import 'create_quiz_screen.dart';
 
@@ -32,8 +33,6 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
 
     if (_isAdmin) {
       _loadQuizzes();
-    } else {
-      _showUnauthorizedAccess();
     }
   }
 
@@ -49,37 +48,11 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
         SnackBar(
           content: Text(
             'Lỗi tải danh sách quiz: : $e',
-            style: TextStyle(color: Colors.red),
           ),
+            backgroundColor: AppColors.wrongAnswer
         ),
       );
     }
-  }
-
-  void _showUnauthorizedAccess() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Từ chối truy cập'),
-            content: Text('Bạn không có quyền truy cập trang quản trị.'),
-            actions: [
-              TextButton(
-                child: Text('Quay lại'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
-                },
-              ),
-            ],
-          );
-        },
-      );
-    });
   }
 
   void _deleteQuiz(QuizModel quiz) async {
@@ -98,8 +71,8 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
         SnackBar(
           content: Text(
             'Đã xóa quiz',
-            style: TextStyle(color: Colors.green),
           ),
+            backgroundColor: AppColors.wrongAnswer
         ),
       );
     } catch (e) {
@@ -107,8 +80,8 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
         SnackBar(
           content: Text(
             'Lỗi xóa quiz',
-            style: TextStyle(color: Colors.red),
           ),
+            backgroundColor: AppColors.wrongAnswer
         ),
       );
     }

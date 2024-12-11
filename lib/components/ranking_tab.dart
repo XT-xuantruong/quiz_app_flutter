@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/components/rarking_card.dart';
 import 'package:quiz_app/components/top_card.dart';
+import 'package:quiz_app/themes/app_colors.dart';
 
 import '../models/ranking_model.dart';
 import '../services/ranking_service.dart';
@@ -55,8 +56,8 @@ class _RankingTabState extends State<RankingTab> {
                   children: [
                     Container(
                       height: 200,
-                      decoration: const BoxDecoration(
-                        color: Colors.green,
+                      decoration: BoxDecoration(
+                        color: AppColors.secondaryColor,
                       ),
                     ),
                     if (_rankings.length > 0)
@@ -101,10 +102,13 @@ class _RankingTabState extends State<RankingTab> {
                   itemCount: _rankings.length - 3 > 0 ? _rankings.length - 3 : 0,
                   itemBuilder: (context, index) {
                     final rank = _rankings[index + 3]; // Lấy từ Top 4
-                    return RankingCard(
-                      user_name: rank.user_name,
-                      total_score: rank.total_score,
-                      rank: index + 4, // Xếp hạng từ Top 4 trở đi
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 8.0,right: 8),
+                      child: RankingCard(
+                        user_name: rank.user_name,
+                        total_score: rank.total_score,
+                        rank: index + 4, // Xếp hạng từ Top 4 trở đi
+                      ),
                     );
                   },
                 ),

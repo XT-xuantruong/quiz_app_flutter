@@ -66,7 +66,6 @@ class _homeScreenState extends State<HomeScreen> {
         });
       }
       print("rank $user");
-
     } catch (e) {
       print('Error fetching user ranking: $e');
     }
@@ -82,7 +81,7 @@ class _homeScreenState extends State<HomeScreen> {
         children: _tabs,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor:  AppColors.cardColor,
+        backgroundColor: AppColors.cardColor,
         currentIndex: _currentIndex,
         selectedItemColor: AppColors.primaryColor,
         unselectedItemColor: AppColors.textSecondary,
@@ -123,7 +122,6 @@ class _homeScreenState extends State<HomeScreen> {
             activeIcon: Icon(Icons.person),
             label: 'Profile',
           ),
-
         ],
       ),
     );
@@ -175,16 +173,20 @@ class _homeScreenState extends State<HomeScreen> {
         );
       case 2:
         return AppBar(
-          backgroundColor: AppColors.backgroundColor,
-            title: const Center(child: Text(
-                'Leaderboard', style: TextStyle(color: Colors.white),
-            ))
-        );
+            backgroundColor: AppColors.secondaryColor,
+            title: const Center(
+                child: Text(
+              'Leaderboard',
+              style: TextStyle(color: Colors.white),
+            )));
       default:
         return AppBar(
-          backgroundColor: AppColors.backgroundColor,
-            title: const Center(child: Text('Quiz App'))
-        );
+            backgroundColor: AppColors.backgroundColor,
+            title: Center(
+                child: Text(
+              'Quiz App',
+              style: TextStyle(fontWeight: FontWeight.bold ,color: AppColors.primaryColor),
+            )));
     }
   }
 }

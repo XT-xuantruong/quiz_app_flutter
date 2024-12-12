@@ -218,12 +218,12 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
                 value: _categories.isNotEmpty && _categoryController.text.isNotEmpty
                     ? _categories.firstWhere(
                       (category) => category.id == _categoryController.text,
-                ).id // Ensure the value matches the category ID
+                ).id
                     : null,
                 items: _categories.map((category) {
                   return DropdownMenuItem<String>(
-                    value: category.id,  // Set the value as category.id
-                    child: Text(category.title),  // Display the category name
+                    value: category.id,
+                    child: Text(category.title),
                   );
                 }).toList(),
                 validator: (value) {

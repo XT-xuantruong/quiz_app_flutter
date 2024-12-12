@@ -31,8 +31,6 @@ class _UserManagementScreenState extends State {
 
     if (_isAdmin) {
       _loadUsers();
-    } else {
-      _showUnauthorizedAccess();
     }
   }
 
@@ -49,31 +47,6 @@ class _UserManagementScreenState extends State {
     }
   }
 
-  void _showUnauthorizedAccess() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Access Denied'),
-            content: const Text('You do not have permission to access the admin page.'),
-            actions: [
-              TextButton(
-                child: const Text('Back'),
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close dialog
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => const LoginScreen())
-                  );
-                },
-              ),
-            ],
-          );
-        },
-      );
-    });
-  }
 
   void _deleteUser(UserModel user) async {
     final prefs = await SharedPreferences.getInstance();

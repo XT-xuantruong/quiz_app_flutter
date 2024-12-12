@@ -39,6 +39,7 @@ class _RankingTabState extends State<RankingTab> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return _isLoading ? const Center(child: CircularProgressIndicator())

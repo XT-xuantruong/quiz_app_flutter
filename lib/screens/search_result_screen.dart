@@ -38,7 +38,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
       });
       if (widget.isCategory){
         final CategoryService categoryService = CategoryService();
-        final Category? category = await categoryService.getCategoryById(widget.searchTerm);
+        final Category? category = await categoryService.getCategoryById(widget.searchTerm);  
         setState(() {
           cate = category;
         });

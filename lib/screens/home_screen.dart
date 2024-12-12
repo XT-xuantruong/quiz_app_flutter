@@ -16,6 +16,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _homeScreenState extends State<HomeScreen> {
+  Key _homeKey = UniqueKey();
+  Key _categoryKey = UniqueKey();
+  Key _profileKey = UniqueKey();
+  Key _rankingKey = UniqueKey();
+
   final RankingService _rankingService = RankingService();
   String userId = "";
   String userName = "";
@@ -36,12 +41,7 @@ class _homeScreenState extends State<HomeScreen> {
     }
   }
 
-  final List<Widget> _tabs = [
-    HomeTab(),
-    CategoryTab(),
-    RankingTab(),
-    ProfileTab(),
-  ];
+
 
   Future<void> getPref() async {
     try {
@@ -78,7 +78,12 @@ class _homeScreenState extends State<HomeScreen> {
       appBar: _buildAppBar(),
       body: IndexedStack(
         index: _currentIndex,
-        children: _tabs,
+        children: [
+          HomeTab(key: _homeKey,),
+          CategoryTab(key: _categoryKey,),
+          RankingTab(key: _rankingKey,),
+          ProfileTab(key: _profileKey,),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: AppColors.cardColor,
@@ -100,6 +105,9 @@ class _homeScreenState extends State<HomeScreen> {
           setState(() {
             _currentIndex = index;
           });
+          if (index == 0) {
+            _homeKey = UniqueKey(); // Force rebuild home tab
+          }
         },
         items: const [
           BottomNavigationBarItem(

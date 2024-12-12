@@ -75,217 +75,220 @@ class _ProfileTabState extends State<ProfileTab> {
       decoration: BoxDecoration(
         color: AppColors.backgroundColor
       ),
-      child: Column(
-
-        children: [
-          SizedBox(height: 30,),
-          ClipOval(
-            child: Image.network(
-              avatar.isNotEmpty  ? avatar :
-              "https://res.cloudinary.com/dvzjb1o3h/image/upload/v1727704410/x6xaehqt16rjvnvhofv3.jpg",
-              fit: BoxFit.cover,
-              width: 100,
-              height: 100,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            isAdmin? '$userName (Admin)': '' ,
-            style: AppTheme.textTheme.titleMedium,
-          ),
-          const SizedBox(height: 16,),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              // color: Colors.white.withOpacity(0.1),
-              border: Border.all(),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ListTile(
-              leading: const Icon(Icons.settings, ),
-              title: Text(
-                'Update profile',
-                style: AppTheme.textTheme.bodyLarge,
+      child: SingleChildScrollView(
+        child: Column(
+        
+          children: [
+            SizedBox(height: 30,),
+            ClipOval(
+              child: Image.network(
+                avatar.isNotEmpty  ? avatar :
+                "https://res.cloudinary.com/dvzjb1o3h/image/upload/v1727704410/x6xaehqt16rjvnvhofv3.jpg",
+                fit: BoxFit.cover,
+                width: 100,
+                height: 100,
               ),
-              trailing: const Icon(Icons.chevron_right,),
-              onTap: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditProfileScreen(
-                      currentName: userName,
-                      currentAvatar: avatar,
-                      currentEmail: email,
-                      currentId: id,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              isAdmin? '$userName (Admin)': '' ,
+              style: AppTheme.textTheme.titleMedium,
+            ),
+            const SizedBox(height: 16,),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                // color: Colors.white.withOpacity(0.1),
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: ListTile(
+                leading: const Icon(Icons.settings, ),
+                title: Text(
+                  'Update profile',
+                  style: AppTheme.textTheme.bodyLarge,
+                ),
+                trailing: const Icon(Icons.chevron_right,),
+                onTap: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditProfileScreen(
+                        currentName: userName,
+                        currentAvatar: avatar,
+                        currentEmail: email,
+                        currentId: id,
+                      ),
                     ),
+                  );
+        
+        
+                  if (result == true) {
+                    getPref();
+                  }
+                },
+              ),
+            ),
+            const SizedBox(height: 16,),
+            if (isAdmin) ...[
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  // color: Colors.white.withOpacity(0.1),
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListTile(
+                  leading: const Icon(Icons.quiz,),
+                  title: const Text(
+                    'Quiz management',
+                    // style: TextStyle(color: Colors.white),
                   ),
-                );
-
-
-                if (result == true) {
-                  getPref();
-                }
-              },
-            ),
-          ),
-          const SizedBox(height: 16,),
-          if (isAdmin) ...[
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                // color: Colors.white.withOpacity(0.1),
-                border: Border.all(),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ListTile(
-                leading: const Icon(Icons.quiz,),
-                title: const Text(
-                  'Quiz management',
-                  // style: TextStyle(color: Colors.white),
-                ),
-                trailing: const Icon(Icons.chevron_right,),
-                onTap: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => QuizManagementScreen(),
-                    ),
-                  );
-                  if (result == true) {
-                    getPref();
-                  }
-                },
-              ),
-            ),
-            const SizedBox(height: 16,),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                // color: Colors.white.withOpacity(0.1),
-                border: Border.all(),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ListTile(
-                leading: const Icon(Icons.question_answer,),
-                title: const Text(
-                  'Question and answer management',
-                  // style: TextStyle(color: Colors.white),
-                ),
-                trailing: const Icon(Icons.chevron_right,),
-                onTap: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const QAManagementScreen(),
-                    ),
-                  );
-                  if (result == true) {
-                    getPref();
-                  }
-                },
-              ),
-            ),
-            const SizedBox(height: 16,),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                // color: Colors.white.withOpacity(0.1),
-                border: Border.all(),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ListTile(
-                leading: const Icon(Icons.category,),
-                title: const Text(
-                  'Category management',
-                  // style: TextStyle(color: Colors.white),
-                ),
-                trailing: const Icon(Icons.chevron_right,),
-                onTap: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CategoryManagementScreen(),
-                    ),
-                  );
-                  if (result == true) {
-                    getPref();
-                  }
-                },
-              ),
-            ),
-            const SizedBox(height: 16,),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                // color: Colors.white.withOpacity(0.1),
-                border: Border.all(),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ListTile(
-                leading: const Icon(Icons.supervised_user_circle,),
-                title: const Text(
-                  'User management',
-                  // style: TextStyle(color: Colors.white),
-                ),
-                trailing: const Icon(Icons.chevron_right,),
-                onTap: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => UserManagementScreen(),
-                    ),
-                  );
-                  if (result == true) {
-                    getPref();
-                  }
-                },
-              ),
-            ),
-            const SizedBox(height: 20),
-          ],
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              // color: Colors.white.withOpacity(0.1),
-              border: Border.all(),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ListTile(
-              leading: const Icon(Icons.logout, ),
-              title: const Text(
-                'Logout',
-                // style: TextStyle(color: Colors.white),
-              ),
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Logout'),
-                      content: const Text('Are you sure you want to logout?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(), // Close dialog
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(); // Close dialog
-                            _logout(); // Perform logout
-                          },
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.red,
-                          ),
-                          child: const Text('Logout'),
-                        ),
-                      ],
+                  trailing: const Icon(Icons.chevron_right,),
+                  onTap: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => QuizManagementScreen(),
+                      ),
                     );
+                    if (result == true) {
+                      getPref();
+                    }
                   },
-                );
-              },
+                ),
+              ),
+              const SizedBox(height: 16,),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  // color: Colors.white.withOpacity(0.1),
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListTile(
+                  leading: const Icon(Icons.question_answer,),
+                  title: const Text(
+                    'Question and answer management',
+                    // style: TextStyle(color: Colors.white),
+                  ),
+                  trailing: const Icon(Icons.chevron_right,),
+                  onTap: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const QAManagementScreen(),
+                      ),
+                    );
+                    if (result == true) {
+                      getPref();
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(height: 16,),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  // color: Colors.white.withOpacity(0.1),
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListTile(
+                  leading: const Icon(Icons.category,),
+                  title: const Text(
+                    'Category management',
+                    // style: TextStyle(color: Colors.white),
+                  ),
+                  trailing: const Icon(Icons.chevron_right,),
+                  onTap: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CategoryManagementScreen(),
+                      ),
+                    );
+                    if (result == true) {
+                      getPref();
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(height: 16,),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  // color: Colors.white.withOpacity(0.1),
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListTile(
+                  leading: const Icon(Icons.supervised_user_circle,),
+                  title: const Text(
+                    'User management',
+                    // style: TextStyle(color: Colors.white),
+                  ),
+                  trailing: const Icon(Icons.chevron_right,),
+                  onTap: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserManagementScreen(),
+                      ),
+                    );
+                    if (result == true) {
+                      getPref();
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                // color: Colors.white.withOpacity(0.1),
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: ListTile(
+                leading: const Icon(Icons.logout, ),
+                title: const Text(
+                  'Logout',
+                  // style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Logout'),
+                        content: const Text('Are you sure you want to logout?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(), // Close dialog
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Close dialog
+                              _logout(); // Perform logout
+                            },
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.red,
+                            ),
+                            child: const Text('Logout'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+            SizedBox(height: 10,)
+          ],
+        ),
       ),
     );
   }

@@ -12,6 +12,7 @@ import '../themes/app_colors.dart';
 import 'category_card.dart';
 
 class HomeTab extends StatefulWidget {
+
   const HomeTab({super.key});
 
   @override
@@ -19,6 +20,7 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+
   final CategoryService _categoryService = CategoryService();
   final QuizService _quizService = QuizService();
 

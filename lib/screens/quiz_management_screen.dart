@@ -49,18 +49,12 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
             content: Text(
               'Error loading quiz list: $e',
             ),
-            backgroundColor: AppColors.wrongAnswer
-        ),
+            backgroundColor: AppColors.wrongAnswer),
       );
     }
   }
 
   void _deleteQuiz(QuizModel quiz) async {
-    final prefs = await SharedPreferences.getInstance();
-    bool? isAdmin = prefs.getBool('isAdmin');
-
-    if (!(isAdmin ?? false)) return;
-
     try {
       print(quiz.id);
       await _quizService.deleteQuiz(quiz.id);
@@ -72,8 +66,7 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
             content: Text(
               'Quiz deleted',
             ),
-            backgroundColor: AppColors.wrongAnswer
-        ),
+            backgroundColor: AppColors.wrongAnswer),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -81,18 +74,19 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
             content: Text(
               'Error deleting quiz',
             ),
-            backgroundColor: AppColors.wrongAnswer
-        ),
+            backgroundColor: AppColors.wrongAnswer),
       );
     }
   }
 
   void _editQuiz(QuizModel quiz) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => CreateQuizScreen(quiz: quiz),
-      ),
-    ).then((_) => _loadQuizzes());
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute(
+            builder: (context) => CreateQuizScreen(quiz: quiz),
+          ),
+        )
+        .then((_) => _loadQuizzes());
   }
 
   @override
@@ -143,13 +137,18 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => CreateQuizScreen(),
-            ),
-          ).then((_) => _loadQuizzes());
+          Navigator.of(context)
+              .push(
+                MaterialPageRoute(
+                  builder: (context) => CreateQuizScreen(),
+                ),
+              )
+              .then((_) => _loadQuizzes());
         },
-        child: Icon(Icons.add, color: Colors.white,),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
         backgroundColor: Colors.deepPurple,
       ),
     );
